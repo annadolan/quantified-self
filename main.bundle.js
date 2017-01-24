@@ -44,7 +44,28 @@
 /* 0 */
 /***/ function(module, exports) {
 
-	
+	var nameInput = document.getElementById('name-field');
+	var calorieInput = document.getElementById('calorie-field');
+	var exercisesTable = document.getElementById('all-exercises-table');
+	var submitButton = document.getElementById('exercise-submit');
+
+	submitButton.addEventListener('click', function () {
+	  var exerciseName = nameInput.value;
+	  var calorieCount = calorieInput.value;
+	  submitExercise(exerciseName, calorieCount);
+	});
+
+	function submitExercise(exerciseName, calorieCount) {
+	  // method for storing data locally
+	  var newRow = document.createElement('tr');
+	  var nameCell = document.createElement('td');
+	  nameCell.innerText = name;
+	  var calorieCell = document.createElement('td');
+	  calorieCell.innerText = calories;
+	  newRow.appendChild(nameCell);
+	  newRow.appendChild(calorieCell);
+	  exercisesTable.appendChild(newRow);
+	}
 
 /***/ }
 /******/ ]);
