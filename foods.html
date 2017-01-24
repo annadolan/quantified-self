@@ -3,9 +3,28 @@
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Manage Foods</title>
+  <script src="jquery-3.1.1.js"></script>
+
 </head>
 <body>
+<h1>Manage Foods</h1>
+  <div>
+
+      Food name:
+      <input id="foodname" name="Food Name">
+      <p id="food-error"></p>
+      Number of calories per serving:
+      <input id="caloriecount" name = "Calorie Count">
+      <p id="calorie-error"></p>
+      <input type="submit" id="new-food-button">
+
+  </div>
+  <h2>All foods</h2>
+  <table id="foods-table">
+      <tr><th>Food Name</th><th>Calorie Count</th><tr>
+  </table>
 
   <script src="main.bundle.js"></script>
+
 </body>
 </html>
