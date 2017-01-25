@@ -42,6 +42,12 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Exercise = __webpack_require__(1);
+
+/***/ },
+/* 1 */
 /***/ function(module, exports) {
 
 	var nameInput = document.getElementById('name-field');
@@ -59,13 +65,22 @@
 	  // method for storing data locally
 	  var newRow = document.createElement('tr');
 	  var nameCell = document.createElement('td');
-	  nameCell.innerText = name;
+	  nameCell.innerText = exerciseName;
 	  var calorieCell = document.createElement('td');
-	  calorieCell.innerText = calories;
+	  calorieCell.innerText = calorieCount;
+	  var trashCell = document.createElement('td');
+	  trashCell.innerHTML = '<p>test</p>';
+	  // trashCell.innerHTML = '<span class="glyphicon glyphicon-trash" aria-hidden="true">';
 	  newRow.appendChild(nameCell);
 	  newRow.appendChild(calorieCell);
+	  newRow.appendChild(trashCell);
 	  exercisesTable.appendChild(newRow);
 	}
+
+	$(document).ready(function () {
+	  $('#this-test').hide();
+	});
+	// module.exports = Exercise;
 
 /***/ }
 /******/ ]);
