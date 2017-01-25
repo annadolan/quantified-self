@@ -5,19 +5,26 @@
   <title>Quantified Self - Manage Exercises</title>
 </head>
 <body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="main.bundle.js"></script>
-  <h1> Manage Exercises </h1>
+  <div id="this-test">
+    <h1> Manage Exercises </h1>
+  </div>
+
+  <div class="error-message">
+  </div>
 
   <div class="">
     Name: <input id="name-field">
-    Calorie Amount: <input id="calorie-field">
+    Calorie Amount: <input id="calorie-field" class="testing-two">
     <input type="submit" id="exercise-submit" value="Add Exercise">
   </div>
+
 
   <div class="">
     <h2> Exercise Table </h2>
     <table id="all-exercises-table">
-      <tr>
+      <tr id="table-header">
         <th> Name </th>
         <th> Calories </th>
         <th> Delete </th>
