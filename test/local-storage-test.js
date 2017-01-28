@@ -20,7 +20,6 @@ test.describe('testing localStorage', function() {
     driver.get("http://localhost:8080/exercises.html");
     driver.executeScript("var exercises = JSON.parse('[]').push({exerciseName: 'Cartwheel', calorieCount: '17'});exerciseDataJSON = JSON.stringify(exercises); return window.localStorage.setItem('exercise-calories', exerciseDataJSON);");
 
-    driver.get("http://localhost:8080/exercises.html");
     driver.executeScript("return window.localStorage.getItem('exercise-calories')").then(function(exerciseName){
       assert.equal(exerciseName, '1');
     });
