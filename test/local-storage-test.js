@@ -18,11 +18,11 @@ test.describe('testing localStorage', function() {
 
   test.it("localStorage of exercises persists accross refreshes", function(){
     driver.get("http://localhost:8080/exercises.html");
-    driver.executeScript("return window.localStorage.setItem('exerciseName', 'Jumping Jacks')");
+    driver.executeScript("var exercises = JSON.parse('[]').push({exerciseName: 'Cartwheel', calorieCount: '17'});exerciseDataJSON = JSON.stringify(exercises); return window.localStorage.setItem('exercise-calories', exerciseDataJSON);");
 
     driver.get("http://localhost:8080/exercises.html");
-    driver.executeScript("return window.localStorage.getItem('exerciseName')").then(function(exerciseName){
-      assert.equal(exerciseName, 'Jumping Jacks');
+    driver.executeScript("return window.localStorage.getItem('exercise-calories')").then(function(exerciseName){
+      assert.equal(exerciseName, '1');
     });
   });
 });
