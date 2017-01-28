@@ -24,4 +24,13 @@ test.describe('testing localStorage', function() {
       assert.equal(exerciseName, '1');
     });
   });
+
+  test.it("localStorage of foods persists accross refreshes", function(){
+    driver.get("http://localhost:8080/foods.html");
+    driver.executeScript("var foods = JSON.parse('[]').push({name: 'Orange', calories: '17'});foodDataJSON = JSON.stringify(foods); return window.localStorage.setItem('foods', foodDataJSON);");
+
+    driver.executeScript("return window.localStorage.getItem('foods')").then(function(foodName){
+      assert.equal(foodName, '1');
+    });
+  });
 });
