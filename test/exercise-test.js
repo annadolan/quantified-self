@@ -25,7 +25,7 @@ test.describe('testing quantified self', function() {
     name.sendKeys('pushups');
     calories.sendKeys('100 test calories');
 
-    var submitButton = driver.findElement({id: 'exercise-submit'})
+    var submitButton = driver.findElement({id: 'exercise-submit'});
     submitButton.click()
 
     driver.findElement({id: 'name-cell-id'}).getText().then(function(nameCell){
@@ -36,6 +36,25 @@ test.describe('testing quantified self', function() {
       assert.equal(nameCell, '100 test calories')
     });
 
+  });
+
+  test.xit('User can delete an exercise', function() {
+
+    driver.get('http://localhost:8080/exercises.html');
+      var name = driver.findElement({id: 'name-field'});
+      var calories = driver.findElement({id: 'calorie-field'});
+      name.sendKeys('flying');
+      calories.sendKeys('500 test calories');
+
+      var submitButton = driver.findElement({id: 'exercise-submit'});
+      submitButton.click()
+
+      var deleteIcon = driver.findElement({id: 'trash-icon-id'});
+      deleteIcon.click()
+
+      driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
+        assert.equal(tableContent, '')
+      });
   });
 
 
