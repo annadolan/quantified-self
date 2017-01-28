@@ -178,14 +178,14 @@
         <h4>Foods</h4>
       </div>
       <div class="panel-body">
-        <p><input type="button" class="btn btn-info" id="create-new-food" value="Create New"></p>
+        <p><input type="button" class="btn btn-info" id="create-new-food" value="Create New" onclick="window.location='/foods.html';"></p>
         <p>Add Selected To</p>
         <p><input type="button" class="btn btn-info" id="breakfast-btn" value="Breakfast">
           <input type="button" class="btn btn-info" id="lunch-btn" value="Lunch"></p>
           <p><input type="button" class="btn btn-info" id="dinner-btn" value="Dinner">
             <input type="button" class="btn btn-info" id="snacks-btn" value="Snacks"></p>
             <div class="form-inline">Filter by Name:
-              <input id="filter" class="form-control">
+              <input id="food-diary-filter" class="form-control">
               <p>
               </div>
               <table id="diary-foods-table" class="table table-bordered">
@@ -204,7 +204,7 @@
               <h4>Exercises</h4>
             </div>
             <div class="panel-body">
-              <p><input type="button" class="btn btn-info" id="create-new-exercise" value="Create New">
+              <p><input type="button" class="btn btn-info" id="create-new-exercise" value="Create New" onclick="window.location='/exercises.html';">
                 <input type="button" class="btn btn-info" id="add-exercise" value="Add Exercise"></p>
                 <table id="diary-exercises-table" class="table table-bordered">
                   <tr class="active">
