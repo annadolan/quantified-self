@@ -57,6 +57,29 @@ test.describe('testing quantified self', function() {
       });
   });
 
+  test.it('Error message flashes if exercise name is empty', function() {
+    driver.get('http://localhost:8080/exercises.html');
+      var calories = driver.findElement({id: 'calorie-field'});
+      calories.sendKeys('15 test calories');
 
+      var submitButton = driver.findElement({id: 'exercise-submit'});
+      submitButton.click()
 
+      driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+        assert.equal(errorMessage, 'Please enter an exercise name')
+      });
+  });
+
+  test.it('Error message flashes if calorie name is empty', function() {
+    driver.get('http://localhost:8080/exercises.html');
+      var exerciseName = driver.findElement({id: 'name-field'});
+      exerciseName.sendKeys('Arm Wrestling');
+
+      var submitButton = driver.findElement({id: 'exercise-submit'});
+      submitButton.click()
+
+      driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+        assert.equal(errorMessage, 'Please enter a calorie amount')
+      });
+  });
 });
