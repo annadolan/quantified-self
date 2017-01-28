@@ -68,6 +68,10 @@ test.describe('testing quantified self', function() {
       driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
         assert.equal(errorMessage, 'Please enter an exercise name')
       });
+
+      driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
+        assert.equal(tableContent, 'Name Calories Delete')
+      });
   });
 
   test.it('Error message flashes if calorie name is empty', function() {
@@ -81,5 +85,64 @@ test.describe('testing quantified self', function() {
       driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
         assert.equal(errorMessage, 'Please enter a calorie amount')
       });
+
+      driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
+        assert.equal(tableContent, 'Name Calories Delete')
+      });
   });
+
+  test.it('Calorie error messages clear apon successful creation', function() {
+    driver.get('http://localhost:8080/exercises.html');
+    var exerciseName = driver.findElement({id: 'name-field'});
+    var calories = driver.findElement({id: 'calorie-field'});
+    exerciseName.sendKeys('Deadlifts');
+
+    var submitButton = driver.findElement({id: 'exercise-submit'});
+    submitButton.click()
+
+    driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+      assert.equal(errorMessage, 'Please enter a calorie amount')
+    });
+
+    calories.sendKeys('1000 test calories');
+
+    var submitButton = driver.findElement({id: 'exercise-submit'});
+    submitButton.click()
+
+    driver.findElement({id: 'name-cell-id'}).getText().then(function(nameCell){
+      assert.equal(nameCell, 'Deadlifts')
+    });
+
+    driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+      assert.equal(errorMessage, '')
+    });
+  });
+
+  test.it('Exercise error messages clear apon successful creation', function() {
+    driver.get('http://localhost:8080/exercises.html');
+    var exerciseName = driver.findElement({id: 'name-field'});
+    var calories = driver.findElement({id: 'calorie-field'});
+    calories.sendKeys('2000 test calories');
+
+    var submitButton = driver.findElement({id: 'exercise-submit'});
+    submitButton.click()
+
+    driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+      assert.equal(errorMessage, 'Please enter an exercise name')
+    });
+
+    exerciseName.sendKeys('Karate');
+
+    var submitButton = driver.findElement({id: 'exercise-submit'});
+    submitButton.click()
+
+    driver.findElement({id: 'name-cell-id'}).getText().then(function(nameCell){
+      assert.equal(nameCell, 'Karate')
+    });
+
+    driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+      assert.equal(errorMessage, '')
+    });
+  });
+
 });
