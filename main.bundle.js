@@ -163,7 +163,7 @@
 	}
 
 	$(document).ready(function () {
-	  displayFoodData();
+	  displayFoods();
 
 	  $(document).on("click", "#trash-icon", function (e) {
 	    e.preventDefault();
@@ -266,7 +266,7 @@
 	  localStorage.setItem('foods', foodDataJSON);
 	}
 
-	function displayFoodData() {
+	function displayFoods() {
 	  JSON.parse(localStorage.getItem('foods')).forEach(function (element) {
 	    buildTable(element.name, element.calories);
 	  });
