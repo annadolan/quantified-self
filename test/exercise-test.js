@@ -49,7 +49,7 @@ test.describe('testing quantified self', function() {
       var submitButton = driver.findElement({id: 'exercise-submit'});
       submitButton.click()
 
-      var deleteIcon = driver.findElement({id: 'trash-icon-id'});
+      var deleteIcon = driver.findElement({id: 'trash-icon'});
       deleteIcon.click()
 
       driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
