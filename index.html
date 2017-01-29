@@ -3,9 +3,221 @@
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Diary</title>
+  <script src="jquery-3.1.1.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
+  <div class="container text-center">
+    <nav>
+      <ul class="pagination pagination-lg">
+        <li>
+          <a href="#" aria-label="Previous" id="diary-yesterday">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
 
-  <script src="main.bundle.js"></script>
-</body>
-</html>
+        <li id="diary-today" class="disabled"><a href=""></a></li>
+
+        <li>
+          <a href="#" aria-label="Next" id="diary-tomorrow">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+        <h4>Breakfast</h4>
+          </div>
+          <div class="panel-body">
+        <table id="breakfast-table" class="table table-bordered">
+          <tr class="active">
+            <th>Name</th>
+            <th>Calories</th>
+          </tr>
+          <tr class="active">
+            <td>Total Calories</td>
+            <td id="breakfast-total-cals"></td>
+          </tr>
+          <tr class="active">
+            <td>Remaining Calories</td>
+            <td id="breakfast-remaining-cals"></td>
+          </tr>
+        </table>
+      </div>
+      </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+        <h4>Lunch</h4>
+      </div>
+      <div class="panel-body">
+        <table id="lunch-table" class="table table-bordered">
+          <tr class="active">
+            <th>Name</th>
+            <th>Calories</th>
+          </tr>
+          <tr class="active">
+            <td>Total Calories</td>
+            <td id="lunch-total-cals"></td>
+          </tr>
+          <tr class="active">
+            <td>Remaining Calories</td>
+            <td id="lunch-remaining-cals"></td>
+          </tr>
+        </table>
+      </div>
+      </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+        <h4>Dinner</h4>
+      </div>
+      <div class="panel-body">
+        <table id="dinner-table" class="table table-bordered">
+          <tr class="active">
+            <th>Name</th>
+            <th>Calories</th>
+          </tr>
+          <tr class="active">
+            <td>Total Calories</td>
+            <td id="dinner-total-cals"></td>
+          </tr>
+          <tr class="active">
+            <td>Remaining Calories</td>
+            <td id="dinner-remaining-cals"></td>
+          </tr>
+        </table>
+      </div>
+      </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+        <h4>Snacks</h4>
+      </div>
+      <div class="panel-body">
+        <table id="snacks-table" class="table table-bordered">
+          <tr class="active">
+            <th>Name</th>
+            <th>Calories</th>
+          </tr>
+          <tr class="active">
+            <td>Total Calories</td>
+            <td id="snacks-total-cals"></td>
+          </tr>
+          <tr class="active">
+            <td>Remaining Calories</td>
+            <td id="snacks-remaining-cals"></td>
+          </tr>
+        </table>
+      </div>
+      </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+        <h4>Exercise</h4>
+      </div>
+      <div class="panel-body">
+        <table id="exercise-table" class="table table-bordered">
+          <tr class="active">
+            <th>Name</th>
+            <th>Calories</th>
+          </tr>
+          <tr class="active">
+            <td>Total Calories</td>
+            <td id="exercise-total-cals"></td>
+          </tr>
+        </table>
+      </div>
+      </div>
+    </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+        <h4>Totals</h4>
+      </div>
+      <div class="panel-body">
+        <table id="totals-table" class="table table-bordered">
+          <tr class="active">
+            <td>Goal Calories</td>
+            <td id="goal-calories"></td>
+          </tr>
+          <tr class="active">
+            <td>Calories Consumed</td>
+            <td id="calories-consumed"></td>
+          </tr>
+          <tr class="active">
+            <td>Calories Burned</td>
+            <td id="calories-burned"></td>
+          </tr>
+          <tr class="active">
+            <td>Remaining Calories</td>
+            <td id="remaining-calories"></td>
+          </tr>
+        </table>
+      </div>
+      </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+        <h4>Foods</h4>
+      </div>
+      <div class="panel-body">
+        <p><input type="button" class="btn btn-info" id="create-new-food" value="Create New" onclick="window.location='/foods.html';"></p>
+        <p>Add Selected To</p>
+        <p><input type="button" class="btn btn-info" id="breakfast-btn" value="Breakfast">
+          <input type="button" class="btn btn-info" id="lunch-btn" value="Lunch"></p>
+          <p><input type="button" class="btn btn-info" id="dinner-btn" value="Dinner">
+            <input type="button" class="btn btn-info" id="snacks-btn" value="Snacks"></p>
+            <div class="form-inline">Filter by Name:
+              <input id="food-diary-filter" class="form-control">
+              <p>
+              </div>
+              <table id="diary-foods-table" class="table table-bordered">
+                <tr class="active">
+                  <th></th>
+                  <th>Food</th>
+                  <th>Calories</th>
+                </tr>
+              </table>
+            </div>
+            </div>
+          </div>
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+              <h4>Exercises</h4>
+            </div>
+            <div class="panel-body">
+              <p><input type="button" class="btn btn-info" id="create-new-exercise" value="Create New" onclick="window.location='/exercises.html';">
+                <input type="button" class="btn btn-info" id="add-exercise" value="Add Exercise"></p>
+                <table id="diary-exercises-table" class="table table-bordered">
+                  <tr class="active">
+                    <th></th>
+                    <th>Food</th>
+                    <th>Calories</th>
+                  </tr>
+                </table>
+              </div>
+              </div>
+            </div>
+            </div>
+          </div>
+          <script src="main.bundle.js"></script>
+        </body>
+        </html>
