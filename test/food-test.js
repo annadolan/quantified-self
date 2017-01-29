@@ -51,7 +51,7 @@ test.describe('testing quantified self foods', function() {
 
       driver.get('http://localhost:8080/foods.html');
 
-      var deleteIcon = driver.findElement({id: 'food-trash-id'});
+      var deleteIcon = driver.findElement({id: 'trash-icon'});
       deleteIcon.click()
 
       driver.findElement({id: 'foods-table'}).getText().then(function(tableContent){
