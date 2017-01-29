@@ -38,7 +38,7 @@ test.describe('testing quantified self', function() {
 
   });
 
-  test.xit('User can delete an exercise', function() {
+  test.it('User can delete an exercise', function() {
 
     driver.get('http://localhost:8080/exercises.html');
       var name = driver.findElement({id: 'name-field'});
@@ -49,11 +49,13 @@ test.describe('testing quantified self', function() {
       var submitButton = driver.findElement({id: 'exercise-submit'});
       submitButton.click()
 
-      var deleteIcon = driver.findElement({id: 'trash-icon'});
+      driver.get('http://localhost:8080/exercises.html');
+
+      var deleteIcon = driver.findElement({id: 'trash-icon-ex'});
       deleteIcon.click()
 
       driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
-        assert.equal(tableContent, '')
+        assert.equal(tableContent, 'Name Calories Delete')
       });
   });
 
