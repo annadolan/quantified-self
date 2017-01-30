@@ -59,6 +59,27 @@ test.describe('testing quantified self', function() {
       });
   });
 
+  test.it('User can edit an exercise name', function() {
+
+    driver.get('http://localhost:8080/exercises.html');
+      var name = driver.findElement({id: 'name-field'});
+      var calories = driver.findElement({id: 'calorie-field'});
+      name.sendKeys('flying');
+      calories.sendKeys('500 test calories');
+
+      var submitButton = driver.findElement({id: 'exercise-submit'});
+      submitButton.click()
+
+      driver.get('http://localhost:8080/exercises.html');
+
+      var exName = driver.findElement({id: 'trash-icon-ex'});
+      deleteIcon.click()
+
+      driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
+        assert.equal(tableContent, 'Name Calories Delete')
+      });
+  });
+
   test.it('Error message flashes if exercise name is empty', function() {
     driver.get('http://localhost:8080/exercises.html');
       var calories = driver.findElement({id: 'calorie-field'});
