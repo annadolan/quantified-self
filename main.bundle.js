@@ -247,6 +247,7 @@
 
 	var foodsTable = document.getElementById('foods-table');
 	var trashIcon = document.getElementById('trash-icon');
+	var foodForm = document.getElementById('food-form');
 
 	function Food(name, calories) {
 	  this.name = name;
@@ -254,7 +255,7 @@
 	}
 
 	Food.prototype.addFood = function () {
-	  this.emptyErrors();
+	  emptyErrors(foodForm);
 	  this.name = $('#foodname').val();
 	  this.calories = $('#caloriecount').val();
 	  if (this.name === "") {
@@ -262,9 +263,9 @@
 	  } else if (this.calories === "") {
 	    $("#calorie-error").append("Please enter a calorie amount");
 	  } else {
-	    this.clearFields();
+	    clearFields('#foodname', '#caloriecount');
 	    this.storeFoods();
-	    $('#foods-table').empty();
+	    $('#foods-table tr:first-child').nextAll().empty();
 	    this.displayFoods();
 	  }
 	};
@@ -323,7 +324,9 @@
 	};
 
 	Food.prototype.editValue = function (obj, key) {
-	  var that = this;
+	  var name = this.name;
+	  var calories = this.calories;
+	  var type = 'foods';
 	  obj.contentEditable = true;
 	  clickedEntry = obj;
 	  var originalKey = obj.innerText;
@@ -332,25 +335,24 @@
 	    if (event.keyCode == 13) {
 	      var newKey = obj.innerText;
 	      obj.contentEditable = false;
-	      that.setLocalStorage(key, newKey);
+	      setLocalStorage(key, newKey, name, calories, type);
 	    }
 	  });
 	  $(document).click(function (e) {
 	    var newKey = clickedEntry.innerText;
 	    clickedEntry.contentEditable = false;
-	    that.setLocalStorage(key, newKey);
+	    setLocalStorage(key, newKey, name, calories, type);
 	  });
 	};
 
-	Food.prototype.emptyErrors = function () {
-	  $("#food-error").empty();
-	  $("#calorie-error").empty();
-	};
+	function emptyErrors(idName) {
+	  $(idName).children().children().empty();
+	}
 
-	Food.prototype.clearFields = function () {
-	  $('#foodname').val("");
-	  $('#caloriecount').val("");
-	};
+	function clearFields(field1, field2) {
+	  $(field1).val("");
+	  $(field2).val("");
+	}
 
 	Food.prototype.storeFoods = function () {
 	  var foodDataJSON = localStorage.getItem('foods');
@@ -374,18 +376,16 @@
 	  });
 	};
 
-	Food.prototype.setLocalStorage = function (key, newKey) {
-	  var food = JSON.parse(localStorage.getItem('foods'));
-	  var name = this.name;
-	  var calories = this.calories;
-	  food.forEach(function (object) {
+	function setLocalStorage(key, newKey, name, calories, type) {
+	  var array = JSON.parse(localStorage.getItem(type));
+	  array.forEach(function (object) {
 	    if (object.name === name && object.calories === calories) {
 	      object[key] = newKey;
 	    }
-	    foodJSON = JSON.stringify(food);
-	    localStorage.setItem('foods', foodJSON);
+	    arrayJSON = JSON.stringify(array);
+	    localStorage.setItem(type, arrayJSON);
 	  });
-	};
+	}
 
 	function filterItems(table, input) {
 	  var input, filter, table, tr, td, i;
