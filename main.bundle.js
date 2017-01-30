@@ -264,26 +264,22 @@
 	  } else {
 	    this.clearFields();
 	    this.storeFoods();
-	    buildTable(this.name, this.calories);
+	    this.buildTable();
 	  }
 	};
 
 	$(document).ready(function () {
+	  var newFood = new Food();
 
-	  displayFoods();
-	  // $(document).on("click", "#trash-icon", function(e){
-	  //   e.preventDefault();
-	  //   var name = $(this).parent().parent().children().first().html()
-	  //   var foods = JSON.parse(localStorage.getItem('foods'))
-	  //   foods.forEach(function(object) {
-	  //     if (object.name == name) {
-	  //       foods.splice(foods.indexOf(object), 1);
-	  //     }
-	  //     foodJSON = JSON.stringify(foods);
-	  //     localStorage.setItem('foods', foodJSON);
-	  //   })
-	  //   $(this).parent().parent().remove();
-	  // });
+	  newFood.displayFoods();
+
+	  $(document).on('click', '#trash-icon', function (e) {
+	    e.preventDefault();
+	    var name = $(this).parent().siblings()[0].innerHTML;
+	    var calories = $(this).parent().siblings()[1].innerHTML;
+	    $(this).parent().parent().remove();
+	    deleteFood(name, calories);
+	  });
 
 	  $(".calorie-cell").on('click', function () {
 	    var key = "calories";
@@ -305,27 +301,16 @@
 	  newFood.addFood();
 	});
 
-	Food.prototype.deleteListen = function () {
-	  var that = this;
-	  $('#trash-icon').on('click', function (e) {
-	    e.preventDefault;
-	    var name = $(this).parent().siblings()[0].html();
-	    var calories = $(this).parent().siblings()[1].html();
-	    that.deleteFood();
-	  });
-	};
-
-	Food.prototype.deleteFood = function () {
-	  var food = { name: this.name, calories: this.calories };
+	function deleteFood(name, calories) {
 	  var foods = JSON.parse(localStorage.getItem('foods'));
-	  foods.filter(function (food, index) {
-	    if (food.name === name && food.calories === calories) {
-	      foods.splice(index, 1);
+	  foods.forEach(function (object) {
+	    if (object.name === name && object.calories === calories) {
+	      foods.splice(foods.indexOf(object), 1);
 	    }
 	    foodJSON = JSON.stringify(foods);
 	    localStorage.setItem('foods', foodJSON);
 	  });
-	};
+	}
 
 	Food.prototype.emptyErrors = function () {
 	  $("#food-error").empty();
@@ -337,35 +322,36 @@
 	  $('#caloriecount').val("");
 	};
 
-	function buildTable(name, calories) {
-	  var newRow = document.createElement('tr');
-	  buildNameCell(name, newRow);
-	  buildCalorieCell(calories, newRow);
-	  buildTrashCell(newRow);
-	  foodsTable.insertBefore(newRow, foodsTable.children[1]);
-	}
-
-	function buildNameCell(name, newRow) {
-	  var nameCell = document.createElement('td');
-	  nameCell.innerText = name;
-	  nameCell.className = "name-cell";
-	  nameCell.id = "food-name-cell";
-	  newRow.appendChild(nameCell);
-	}
-
-	function buildCalorieCell(calories, newRow) {
-	  var calorieCell = document.createElement('td');
-	  calorieCell.innerText = calories;
-	  calorieCell.className = "calorie-cell";
-	  calorieCell.id = "food-calorie-cell";
-	  newRow.appendChild(calorieCell);
-	}
-
-	function buildTrashCell(newRow) {
-	  var trashCell = document.createElement('td');
-	  trashCell.innerHTML = "<a href='' id='trash-icon'><span class='glyphicon glyphicon-trash trash-icon'></a>";
-	  newRow.appendChild(trashCell);
-	}
+	//
+	// Food.prototype.buildTable = function() {
+	//   var newRow = document.createElement('tr');
+	//   buildNameCell(this.name, newRow);
+	//   buildCalorieCell(this.calories, newRow);
+	//   buildTrashCell(newRow);
+	//   foodsTable.insertBefore(newRow, foodsTable.children[1]);
+	// }
+	//
+	// function buildNameCell(name, newRow){
+	//   var nameCell = document.createElement('td');
+	//   nameCell.innerText = name;
+	//   nameCell.className = "name-cell";
+	//   nameCell.id = "food-name-cell";
+	//   newRow.appendChild(nameCell);
+	// }
+	//
+	// function buildCalorieCell(calories, newRow){
+	//   var calorieCell = document.createElement('td');
+	//   calorieCell.innerText = calories;
+	//   calorieCell.className = "calorie-cell";
+	//   calorieCell.id = "food-calorie-cell";
+	//   newRow.appendChild(calorieCell);
+	// }
+	//
+	// function buildTrashCell(newRow){
+	//   var trashCell = document.createElement('td');
+	//   trashCell.innerHTML = "<a href='' id='trash-icon'><span class='glyphicon glyphicon-trash trash-icon'></a>";
+	//   newRow.appendChild(trashCell);
+	// }
 
 	Food.prototype.storeFoods = function () {
 	  var foodDataJSON = localStorage.getItem('foods');
@@ -376,14 +362,22 @@
 	  foods.push(this);
 	  foodDataJSON = JSON.stringify(foods);
 	  localStorage.setItem('foods', foodDataJSON);
-	  this.deleteListen();
 	};
 
-	function displayFoods() {
-	  JSON.parse(localStorage.getItem('foods')).forEach(function (element) {
-	    buildTable(element.name, element.calories);
+	Food.prototype.displayFoods = function () {
+	  var foods = JSON.parse(localStorage.getItem('foods'));
+	  foods.forEach(function (object) {
+	    $('foods-table').append(`<tr>
+	      <td class='name-cell' id='food-name-cell'>${object.name}</td>
+	      <td class='calorie-cell' id='food-calorie-cell'>${object.calories}</td>
+	      <td><a href='' id='trash-icon'><span class='glyphicon glyphicon-trash trash-icon'></a></td>
+	      </tr>`);
 	  });
-	}
+	  debugger;
+	  // JSON.parse(localStorage.getItem('foods')).forEach(function(element){
+	  //   element.buildTable();
+	  // });
+	};
 
 	function editValue(obj, key) {
 	  obj.contentEditable = true;
