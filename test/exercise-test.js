@@ -28,11 +28,11 @@ test.describe('testing quantified self', function() {
     var submitButton = driver.findElement({id: 'exercise-submit'});
     submitButton.click()
 
-    driver.findElement({id: 'name-cell-id'}).getText().then(function(nameCell){
+    driver.findElement({id: 'exercise-name-cell'}).getText().then(function(nameCell){
       assert.equal(nameCell, 'pushups')
     });
 
-    driver.findElement({id: 'calorie-cell-id'}).getText().then(function(nameCell){
+    driver.findElement({id: 'exercise-calorie-cell'}).getText().then(function(nameCell){
       assert.equal(nameCell, '100 test calories')
     });
 
@@ -51,11 +51,11 @@ test.describe('testing quantified self', function() {
 
       driver.get('http://localhost:8080/exercises.html');
 
-      var deleteIcon = driver.findElement({id: 'trash-icon-ex'});
+      var deleteIcon = driver.findElement({id: 'exercise-trash-icon'});
       deleteIcon.click()
 
       driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
-        assert.equal(tableContent, 'Name Calories Delete')
+        assert.equal(tableContent, 'Name Calories')
       });
   });
 
@@ -88,12 +88,12 @@ test.describe('testing quantified self', function() {
       var submitButton = driver.findElement({id: 'exercise-submit'});
       submitButton.click()
 
-      driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+      driver.findElement({id: 'exercise-error'}).getText().then(function(errorMessage){
         assert.equal(errorMessage, 'Please enter an exercise name')
       });
 
       driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
-        assert.equal(tableContent, 'Name Calories Delete')
+        assert.equal(tableContent, 'Name Calories')
       });
   });
 
@@ -105,12 +105,12 @@ test.describe('testing quantified self', function() {
       var submitButton = driver.findElement({id: 'exercise-submit'});
       submitButton.click()
 
-      driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+      driver.findElement({id: 'calories-error'}).getText().then(function(errorMessage){
         assert.equal(errorMessage, 'Please enter a calorie amount')
       });
 
       driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
-        assert.equal(tableContent, 'Name Calories Delete')
+        assert.equal(tableContent, 'Name Calories')
       });
   });
 
@@ -123,7 +123,7 @@ test.describe('testing quantified self', function() {
     var submitButton = driver.findElement({id: 'exercise-submit'});
     submitButton.click()
 
-    driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+    driver.findElement({id: 'calories-error'}).getText().then(function(errorMessage){
       assert.equal(errorMessage, 'Please enter a calorie amount')
     });
 
@@ -132,11 +132,11 @@ test.describe('testing quantified self', function() {
     var submitButton = driver.findElement({id: 'exercise-submit'});
     submitButton.click()
 
-    driver.findElement({id: 'name-cell-id'}).getText().then(function(nameCell){
+    driver.findElement({id: 'exercise-name-cell'}).getText().then(function(nameCell){
       assert.equal(nameCell, 'Deadlifts')
     });
 
-    driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+    driver.findElement({id: 'calories-error'}).getText().then(function(errorMessage){
       assert.equal(errorMessage, '')
     });
   });
@@ -150,7 +150,7 @@ test.describe('testing quantified self', function() {
     var submitButton = driver.findElement({id: 'exercise-submit'});
     submitButton.click()
 
-    driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+    driver.findElement({id: 'exercise-error'}).getText().then(function(errorMessage){
       assert.equal(errorMessage, 'Please enter an exercise name')
     });
 
@@ -159,11 +159,11 @@ test.describe('testing quantified self', function() {
     var submitButton = driver.findElement({id: 'exercise-submit'});
     submitButton.click()
 
-    driver.findElement({id: 'name-cell-id'}).getText().then(function(nameCell){
+    driver.findElement({id: 'exercise-name-cell'}).getText().then(function(nameCell){
       assert.equal(nameCell, 'Karate')
     });
 
-    driver.findElement({id: 'error-message-id'}).getText().then(function(errorMessage){
+    driver.findElement({id: 'exercise-error'}).getText().then(function(errorMessage){
       assert.equal(errorMessage, '')
     });
   });
