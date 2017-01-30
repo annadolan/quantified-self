@@ -48,6 +48,7 @@
 	var diaryExercisesTable = document.getElementById('diary-exercises-table');
 	var Food = __webpack_require__(1);
 	var Exercise = __webpack_require__(2);
+	var Reset = __webpack_require__(3);
 	var addExerciseButton = document.getElementById('add-exercise');
 
 	function displayFoodData() {
@@ -79,6 +80,13 @@
 	  diaryFoodsTable.insertBefore(newRow, diaryFoodsTable.children[1]);
 	}
 
+	function uncheckFoodCheckboxes() {
+	  $(".food-checkbox").each(function () {
+	    ;
+	    this.checked = false;
+	  });
+	}
+
 	function submitExercise(exerciseName, calorieCount) {
 	  var newRow = document.createElement('tr');
 	  var nameCell = document.createElement('td');
@@ -99,11 +107,37 @@
 	displayExerciseData();
 	displayFoodData();
 
+	function changeTextColor(remainingCalories, mealId) {
+	  if (remainingCalories < 0) {
+	    $(mealId).css('color', 'red');
+	  } else {
+	    $(mealId).css('color', 'green');
+	  }
+	}
+
 	function filterFoods() {
 	  var input, filter, table, tr, td, i;
 	  input = document.getElementById("food-diary-filter");
 	  filter = input.value.toUpperCase();
 	  tr = diaryFoodsTable.getElementsByTagName("tr");
+
+	  for (i = 0; i < tr.length; i++) {
+	    td = tr[i].getElementsByTagName("td")[0];
+	    if (td) {
+	      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+	        tr[i].style.display = "";
+	      } else {
+	        tr[i].style.display = "none";
+	      }
+	    }
+	  }
+	}
+
+	function filterExercises() {
+	  var input, filter, table, tr, td, i;
+	  input = document.getElementById("exercises-diary-filter");
+	  filter = input.value.toUpperCase();
+	  tr = diaryExercisesTable.getElementsByTagName("tr");
 
 	  for (i = 0; i < tr.length; i++) {
 	    td = tr[i].getElementsByTagName("td")[0];
@@ -145,6 +179,10 @@
 	  filterFoods();
 	});
 
+	$("#exercises-diary-filter").keyup(function () {
+	  filterExercises();
+	});
+
 	$("#add-exercise").on('click', function () {
 	  exerciseSubmit();
 	});
@@ -157,6 +195,9 @@
 	      var eName = exercises[i].nextElementSibling.innerText;
 	      var eCalories = exercises[i].nextElementSibling.nextElementSibling.innerText;
 	      populateExerciseTable(eName, eCalories);
+	      calculateTotalCalories();
+	      updateRemainingCalories(eCalories, 0);
+	      exercises[i].checked = false;
 	    }
 	  }
 	}
@@ -169,7 +210,29 @@
 	  var trashCell = row.insertCell(2);
 	  nameCell.innerText = eName;
 	  caloriesCell.innerText = eCalories;
+	  caloriesCell.className = "exercise-calorie-cell";
 	  trashCell.innerHTML = "<span class='glyphicon glyphicon-trash trash-icon'>";
+	}
+
+	function calculateTotalCalories() {
+	  var exercisesTable = document.getElementById('exercise-table');
+	  var totalCalorieCell = document.getElementById('exercise-total-cals');
+	  var totalCalories = 0;
+
+	  $(".exercise-calorie-cell").each(function () {
+	    ;
+	    totalCalories += parseFloat(this.innerText);
+	  });
+
+	  totalCalorieCell.innerText = totalCalories;
+
+	  if (totalCalories > 0) {
+	    $('#remaining-calories').css('color', 'green');
+	  } else {
+	    $('#remaining-calories').css('color', 'black');
+	  }
+
+	  updateCaloriesBurned(totalCalories);
 	}
 
 	$("#breakfast-btn").on('click', function () {
@@ -197,17 +260,30 @@
 	      var fCalories = foods[i].nextElementSibling.nextElementSibling.innerText;
 	      if (event.currentTarget.id === "breakfast-btn") {
 	        populateBreakfastTable(fName, fCalories);
+	        calculateTotalBreakfastCalories();
+	        updateCaloriesConsumed();
+	        updateRemainingCalories(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "lunch-btn") {
 	        populateLunchTable(fName, fCalories);
+	        calculateTotalLunchCalories();
+	        updateCaloriesConsumed();
+	        updateRemainingCalories(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "dinner-btn") {
 	        populateDinnerTable(fName, fCalories);
+	        calculateTotalDinnerCalories();
+	        updateCaloriesConsumed();
+	        updateRemainingCalories(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "snacks-btn") {
 	        populateSnacksTable(fName, fCalories);
+	        calculateTotalSnackCalories();
+	        updateCaloriesConsumed();
+	        updateRemainingCalories(0, fCalories);
 	      }
 	    }
+	    foods[i].checked = false;
 	  }
 	}
 
@@ -231,6 +307,85 @@
 	  addRowToTable(snacksTable, fName, fCalories);
 	}
 
+	function calculateTotalBreakfastCalories() {
+	  var totalCalorieCell = document.getElementById('breakfast-total-cals');
+	  var breakfastCalories = 0;
+
+	  $(".breakfast-table-calorie-cell").each(function () {
+	    ;
+	    breakfastCalories += parseFloat(this.innerText);
+	  });
+
+	  totalCalorieCell.innerText = breakfastCalories;
+	  calculateRemainingCalories("breakfast", breakfastCalories);
+	}
+
+	function calculateRemainingCalories(meal, totalCalories) {
+	  if (meal === "breakfast") {
+	    var remainingBreakfastCalories = 400 - totalCalories;
+	    var breakfastRemainingCell = document.getElementById('breakfast-remaining-cals');
+	    breakfastRemainingCell.innerText = remainingBreakfastCalories;
+	    changeTextColor(remainingBreakfastCalories, '#breakfast-remaining-cals');
+	  }
+	  if (meal === "lunch") {
+	    remainingLunchCalories = 600 - totalCalories;
+	    var lunchRemainingCell = document.getElementById('lunch-remaining-cals');
+	    lunchRemainingCell.innerText = remainingLunchCalories;
+	    changeTextColor(remainingLunchCalories, '#lunch-remaining-cals');
+	  }
+	  if (meal === "dinner") {
+	    remainingDinnerCalories = 800 - totalCalories;
+	    var dinnerRemainingCell = document.getElementById('dinner-remaining-cals');
+	    dinnerRemainingCell.innerText = remainingDinnerCalories;
+	    changeTextColor(remainingDinnerCalories, '#dinner-remaining-cals');
+	  }
+	  if (meal === "snacks") {
+	    remainingSnacksCalories = 200 - totalCalories;
+	    var snacksRemainingCell = document.getElementById('snacks-remaining-cals');
+	    snacksRemainingCell.innerText = remainingSnacksCalories;
+	    changeTextColor(remainingSnacksCalories, '#snacks-remaining-cals');
+	  }
+	}
+
+	function calculateTotalLunchCalories() {
+	  var lunchCalorieCell = document.getElementById('lunch-total-cals');
+	  var lunchCalories = 0;
+
+	  $(".lunch-table-calorie-cell").each(function () {
+	    ;
+	    lunchCalories += parseFloat(this.innerText);
+	  });
+
+	  lunchCalorieCell.innerText = lunchCalories;
+	  calculateRemainingCalories("lunch", lunchCalories);
+	}
+
+	function calculateTotalDinnerCalories() {
+	  var dinnerCalorieCell = document.getElementById('dinner-total-cals');
+	  var dinnerCalories = 0;
+
+	  $(".dinner-table-calorie-cell").each(function () {
+	    ;
+	    dinnerCalories += parseFloat(this.innerText);
+	  });
+
+	  dinnerCalorieCell.innerText = dinnerCalories;
+	  calculateRemainingCalories("dinner", dinnerCalories);
+	}
+
+	function calculateTotalSnackCalories() {
+	  var snacksCalorieCell = document.getElementById('snacks-total-cals');
+	  var snacksCalories = 0;
+
+	  $(".snacks-table-calorie-cell").each(function () {
+	    ;
+	    snacksCalories += parseFloat(this.innerText);
+	  });
+
+	  snacksCalorieCell.innerText = snacksCalories;
+	  calculateRemainingCalories("snacks", snacksCalories);
+	}
+
 	function addRowToTable(mealTable, fName, fCalories) {
 	  var row = mealTable.insertRow(1);
 	  var nameCell = row.insertCell(0);
@@ -238,8 +393,85 @@
 	  var trashCell = row.insertCell(2);
 	  nameCell.innerText = fName;
 	  caloriesCell.innerText = fCalories;
+	  caloriesCell.className = mealTable.id + "-calorie-cell";
 	  trashCell.innerHTML = "<span class='glyphicon glyphicon-trash trash-icon'>";
 	}
+
+	function setRemainingCalories(goalCalories) {
+	  var remainingCaloriesCell = document.getElementById('remaining-calories');
+	  remainingCaloriesCell.innerText = goalCalories;
+	}
+
+	function updateGoalCalories() {
+	  var goalCaloriesCell = document.getElementById('goal-calories');
+	  goalCaloriesCell.innerText = 2000;
+	  setRemainingCalories(goalCaloriesCell.innerText);
+	}
+
+	function updateCaloriesConsumed() {
+	  var caloriesConsumedCell = document.getElementById('calories-consumed');
+	  var breakfastTotal = document.getElementById('breakfast-total-cals');
+	  var lunchTotal = document.getElementById('lunch-total-cals');
+	  var dinnerTotal = document.getElementById('dinner-total-cals');
+	  var snacksTotal = document.getElementById('snacks-total-cals');
+	  var total = 0;
+
+	  if (breakfastTotal.innerText !== "") {
+	    total += parseFloat(breakfastTotal.innerText);
+	  }
+	  if (lunchTotal.innerText !== "") {
+	    total += parseFloat(lunchTotal.innerText);
+	  }
+	  if (dinnerTotal.innerText !== "") {
+	    total += parseFloat(dinnerTotal.innerText);
+	  }
+	  if (snacksTotal.innerText !== "") {
+	    total += parseFloat(snacksTotal.innerText);
+	  }
+	  caloriesConsumedCell.innerText = total;
+	}
+
+	function updateCaloriesBurned(totalCalories) {
+	  var caloriesBurnedCell = document.getElementById('calories-burned');
+	  caloriesBurnedCell.innerText = totalCalories;
+
+	  if (totalCalories > 0) {
+	    $('#remaining-calories').css('color', 'green');
+	  } else {
+	    $('#remaining-calories').css('color', 'black');
+	  }
+	}
+
+	function updateRemainingCalories(additionalCalories, negativeCalories) {
+	  var remainingCaloriesCell = document.getElementById('remaining-calories');
+
+	  if (document.getElementById('goal-calories').innerText === "") {} else {
+	    remainingCalories = parseFloat(document.getElementById('remaining-calories').innerText);
+	  }
+
+	  remainingCalories += parseFloat(additionalCalories);
+	  remainingCalories -= parseFloat(negativeCalories);
+
+	  remainingCaloriesCell.innerText = remainingCalories;
+	  if (remainingCalories < 0) {
+	    $('#remaining-calories').css('color', 'red');
+	  } else {
+	    $('#remaining-calories').css('color', 'green');
+	  }
+	}
+
+	function setTotalsTable() {
+	  updateGoalCalories();
+	  var caloriesConsumedCell = document.getElementById('calories-consumed');
+	  var caloriesBurnedCell = document.getElementById('calories-burned');
+
+	  caloriesConsumedCell.innerText = "0";
+	  caloriesBurnedCell.innerText = "0";
+	  // updateCaloriesConsumed();
+	  // updateCaloriesBurned();
+	  updateRemainingCalories(0, 0);
+	}
+	setTotalsTable();
 
 /***/ },
 /* 1 */
@@ -255,7 +487,8 @@
 	}
 
 	Food.prototype.addFood = function () {
-	  emptyErrors(foodForm);
+	  var reset = new Reset();
+	  reset.emptyErrors(foodForm);
 	  this.name = $('#foodname').val();
 	  this.calories = $('#caloriecount').val();
 	  if (this.name === "") {
@@ -263,7 +496,7 @@
 	  } else if (this.calories === "") {
 	    $("#calorie-error").append("Please enter a calorie amount");
 	  } else {
-	    clearFields('#foodname', '#caloriecount');
+	    reset.clearFields('#foodname', '#caloriecount');
 	    this.storeFoods();
 	    $('#foods-table tr:first-child').nextAll().empty();
 	    this.displayFoods();
@@ -345,14 +578,14 @@
 	  });
 	};
 
-	function emptyErrors(idName) {
-	  $(idName).children().children().empty();
-	}
-
-	function clearFields(field1, field2) {
-	  $(field1).val("");
-	  $(field2).val("");
-	}
+	// function emptyErrors(idName){
+	//   $(idName).children().children().empty();
+	// }
+	//
+	// function clearFields(field1, field2){
+	//   $(field1).val("");
+	//   $(field2).val("");
+	// }
 
 	Food.prototype.storeFoods = function () {
 	  var foodDataJSON = localStorage.getItem('foods');
@@ -599,6 +832,23 @@
 	    }
 	  }
 	}
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	function Reset() {}
+
+	Reset.prototype.emptyErrors = function (idName) {
+	  $(idName).children().children().empty();
+	};
+
+	Reset.prototype.clearFields = function (field1, field2) {
+	  $(field1).val("");
+	  $(field2).val("");
+	};
+
+	module.exports = Reset;
 
 /***/ }
 /******/ ]);
