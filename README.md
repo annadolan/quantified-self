@@ -4,6 +4,8 @@ Quantified self is a calorie tracker app that allows the user to monitor calorie
 
 We built this project in module 4 of the backend engineering program at Turing School of Software and Design. Our learning goals were to to understand the basics of DOM traversal, event handling, and state management in Javascript and jQuery, to use Pivotal tracker to manage a project with multiple developers, and to use a production git workflow.
 
+Our test suite for this project uses Selenium WebdriverJS.
+
 [Original Assignment](http://backend.turing.io/module4/projects/quantified-self)
 
 ## Deploy
@@ -13,26 +15,18 @@ https://annadolan.github.io/quantified-self
 ## Clone
 
 
-  ```shell
-  git clone https://github.com/annadolan/quantified-self.git
-  ```
+  `git clone https://github.com/annadolan/quantified-self.git`
 
- ```shell
- cd quantified-self
- ```
+ `cd quantified-self`
  
- ```shell
- run npm build
- ```
+ `run npm build`
 
 
 ## Run Local Server
 
 To run development server:
 
-```shell
-npm start
-```
+`npm start`
 
 Visit:
 
@@ -44,9 +38,7 @@ Visit:
 
 To run all tests:
 
-```js
-npm test
-```
+`npm test`
 
 ## Authors
 * Jon Kimble: [Github](https://github.com/jbkimble)
