@@ -18,7 +18,7 @@ https://annadolan.github.io/quantified-self
   ```
 
  ```shell
- quantified-self
+ cd quantified-self
  ```
  
  ```shell
