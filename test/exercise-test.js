@@ -141,7 +141,7 @@ test.describe('testing quantified self', function() {
       });
   });
 
-  test.it('Calorie error messages clear apon successful creation', function() {
+  test.it('Calorie error messages clear upon successful creation', function() {
     driver.get('http://localhost:8080/exercises.html');
     var exerciseName = driver.findElement({id: 'name-field'});
     var calories = driver.findElement({id: 'calorie-field'});
@@ -168,7 +168,7 @@ test.describe('testing quantified self', function() {
     });
   });
 
-  test.it('Exercise error messages clear apon successful creation', function() {
+  test.it('Exercise error messages clear upon successful creation', function() {
     driver.get('http://localhost:8080/exercises.html');
     var exerciseName = driver.findElement({id: 'name-field'});
     var calories = driver.findElement({id: 'calorie-field'});
@@ -192,6 +192,25 @@ test.describe('testing quantified self', function() {
 
     driver.findElement({id: 'exercise-error'}).getText().then(function(errorMessage){
       assert.equal(errorMessage, '')
+    });
+  });
+
+  test.it('Exercise form clears upon successful creation', function() {
+    driver.get('http://localhost:8080/exercises.html');
+    var exerciseName = driver.findElement({id: 'name-field'});
+    var calories = driver.findElement({id: 'calorie-field'});
+    calories.sendKeys('2000 test calories');
+    exerciseName.sendKeys('Karate');
+
+    var submitButton = driver.findElement({id: 'exercise-submit'});
+    submitButton.click()
+
+    exerciseName.getText().then(function(exerciseName){
+      assert.equal(exerciseName, '')
+    });
+
+    calories.getText().then(function(calories){
+      assert.equal(calories, '')
     });
   });
 
