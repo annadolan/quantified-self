@@ -14,7 +14,7 @@ https://annadolan.github.io/quantified-self
 
 
   ```shell
-  git clone git@github.com:annadolan/quantified-self.git
+  git clone https://github.com/annadolan/quantified-self.git
   ```
 
  cd `quantified-self`
