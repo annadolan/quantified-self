@@ -8,7 +8,7 @@ We built this project in module 4 of the backend engineering program at Turing S
 
 ## Deploy
 
-https://annadolan.github.io/quantified_self
+https://annadolan.github.io/quantified-self
 
 ## Clone
 
