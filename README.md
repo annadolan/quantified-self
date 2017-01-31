@@ -12,8 +12,8 @@ https://annadolan.github.io/quantified-self
 
 ## Clone
 
-1.
-  ```shell
+
+1.  ```shell
   git clone git@github.com:annadolan/quantified-self.git
   ```
 
