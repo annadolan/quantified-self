@@ -17,7 +17,9 @@ https://annadolan.github.io/quantified-self
   git clone https://github.com/annadolan/quantified-self.git
   ```
 
- cd `quantified-self`
+ ```shell
+ quantified-self
+ ```
  
  ```shell
  run npm build
