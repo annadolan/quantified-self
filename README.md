@@ -13,17 +13,12 @@ https://annadolan.github.io/quantified-self
 ## Clone
 
 
-1.  ```shell
+  ```shell
   git clone git@github.com:annadolan/quantified-self.git
   ```
 
-2. cd `quantified-self`
+ cd `quantified-self`
 
-3. Remove the default remote (origin)
-
-  ```shell
-  git remote rm origin
-  ```
 
 ## Run Local Server
 
