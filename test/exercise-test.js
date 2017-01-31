@@ -2,7 +2,7 @@ var assert    = require('chai').assert;
 var webdriver = require('selenium-webdriver');
 var test      = require('selenium-webdriver/testing');
 
-test.describe('testing quantified self', function() {
+test.describe('testing quantified self exercises', function() {
     var driver;
   this.timeout(10000);
 
@@ -16,7 +16,7 @@ test.describe('testing quantified self', function() {
     driver.quit();
   })
 
-  test.it('should allow me to add a name and calorie amount', function() {
+  test.it('User can add a name and calorie amount', function() {
 
     driver.get('http://localhost:8080/exercises.html');
 
@@ -128,6 +128,36 @@ test.describe('testing quantified self', function() {
       driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
         assert.equal(tableContent, 'Name Calories\nfly 300 test calories')
       });
+  });
+
+  test.xit('Table filters based on input', function() {
+
+    driver.get('http://localhost:8080/exercises.html');
+
+    var name = driver.findElement({id: 'name-field'});
+    var calories = driver.findElement({id: 'calorie-field'});
+    name.sendKeys('pushups');
+    calories.sendKeys('100 test calories');
+
+    var submitButton = driver.findElement({id: 'exercise-submit'});
+    submitButton.click()
+
+    name.sendKeys('pushdowns');
+    calories.sendKeys('200 test calories');
+
+    submitButton.click()
+
+    driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
+      assert.equal(tableContent, 'Name Calories\npushdowns 200 test calories\npushups 100 test calories')
+    });
+
+    var filterField = driver.findElement({id: 'filter-field'})
+    filterField.sendKeys('down')
+
+    driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
+      assert.equal(tableContent, 'Name Calories\npushdowns 200 test calories')
+    });
+
   });
 
   test.it('Error message flashes if exercise name is empty', function() {
