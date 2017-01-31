@@ -64,19 +64,46 @@ test.describe('testing quantified self', function() {
     driver.get('http://localhost:8080/exercises.html');
       var name = driver.findElement({id: 'name-field'});
       var calories = driver.findElement({id: 'calorie-field'});
-      name.sendKeys('flying');
+      name.sendKeys('fly');
       calories.sendKeys('500 test calories');
 
       var submitButton = driver.findElement({id: 'exercise-submit'});
-      submitButton.click()
+      submitButton.click();
 
       driver.get('http://localhost:8080/exercises.html');
 
-      var exName = driver.findElement({id: 'trash-icon-ex'});
-      deleteIcon.click()
+      var exName = driver.findElement({id: 'exercise-name-cell'});
+      exName.click();
+      exName.clear();
+      exName.sendKeys('zoom');
+      exName.sendKeys(webdriver.Key.ENTER);
 
       driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
-        assert.equal(tableContent, 'Name Calories Delete')
+        assert.equal(tableContent, 'Name Calories\nzoom 500 test calories')
+      });
+  });
+
+  test.it('User can edit exercise calories', function() {
+
+    driver.get('http://localhost:8080/exercises.html');
+      var name = driver.findElement({id: 'name-field'});
+      var calories = driver.findElement({id: 'calorie-field'});
+      name.sendKeys('fly');
+      calories.sendKeys('500 test calories');
+
+      var submitButton = driver.findElement({id: 'exercise-submit'});
+      submitButton.click();
+
+      driver.get('http://localhost:8080/exercises.html');
+
+      var exName = driver.findElement({id: 'exercise-calorie-cell'});
+      exName.click();
+      exName.clear();
+      exName.sendKeys('300 test calories');
+      exName.sendKeys(webdriver.Key.ENTER);
+
+      driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
+        assert.equal(tableContent, 'Name Calories\nfly 300 test calories')
       });
   });
 
