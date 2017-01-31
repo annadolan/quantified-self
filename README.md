@@ -18,6 +18,10 @@ https://annadolan.github.io/quantified-self
   ```
 
  cd `quantified-self`
+ 
+ ```shell
+ run npm build
+ ```
 
 
 ## Run Local Server
