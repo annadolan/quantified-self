@@ -488,10 +488,12 @@
 	}
 
 	Food.prototype.addFood = function () {
+	  var errors = new Errors();
 	  var reset = new Reset();
+	  var someTable = new Table();
 	  var foodForm = document.getElementById('food-form');
 	  var foodsTable = document.getElementById('foods-table');
-	  reset.emptyErrors(foodForm);
+	  errors.emptyErrors(foodForm);
 	  this.name = $('#foodname').val();
 	  this.calories = $('#caloriecount').val();
 	  if (this.name === "") {
@@ -501,7 +503,7 @@
 	  } else {
 	    reset.clearFields('#foodname', '#caloriecount');
 	    this.storeFoods();
-	    reset.clearTable(foodsTable);
+	    someTable.clearTable(foodsTable);
 	    this.displayFoods();
 	  }
 	};
@@ -567,6 +569,10 @@
 	$(document).ready(function () {
 	  var newFood = new Food();
 
+	  $('#new-food-button').on('click', function () {
+	    newFood.addFood();
+	  });
+
 	  newFood.displayFoods();
 
 	  $(document).on('click', '#trash-icon', function (e) {
@@ -601,11 +607,6 @@
 	  });
 	});
 
-	$('#new-food-button').on('click', function () {
-	  var newFood = new Food();
-	  newFood.addFood();
-	});
-
 	module.exports = Food;
 
 /***/ },
@@ -614,17 +615,9 @@
 
 	function Reset() {}
 
-	Reset.prototype.emptyErrors = function (idName) {
-	  $(idName).children().children().empty();
-	};
-
 	Reset.prototype.clearFields = function (field1, field2) {
 	  $(field1).val("");
 	  $(field2).val("");
-	};
-
-	Reset.prototype.clearTable = function (table) {
-	  $(`#${table.id} tr:first-child`).nextAll().empty();
 	};
 
 	module.exports = Reset;
@@ -671,15 +664,16 @@
 	  }
 	};
 
+	Table.prototype.clearTable = function (table) {
+	  $(`#${table.id} tr:first-child`).nextAll().empty();
+	};
+
 	module.exports = Table;
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var exercisesTable = document.getElementById('all-exercises-table');
-	var trashIcon = document.getElementById('trash-icon-ex');
-	var exerciseForm = document.getElementById('exercise-form');
 	var Reset = __webpack_require__(2);
 	var Save = __webpack_require__(3);
 	var Table = __webpack_require__(4);
@@ -690,8 +684,12 @@
 	}
 
 	Exercise.prototype.addExercise = function () {
+	  var errors = new Errors();
 	  var reset = new Reset();
-	  reset.emptyErrors(exerciseForm);
+	  var someTable = new Table();
+	  var exercisesTable = document.getElementById('all-exercises-table');
+	  var exerciseForm = document.getElementById('exercise-form');
+	  errors.emptyErrors(exerciseForm);
 	  this.name = $('#name-field').val();
 	  this.calories = $('#calorie-field').val();
 	  if (this.name === "") {
@@ -701,7 +699,7 @@
 	  } else {
 	    reset.clearFields('#name-field', '#calorie-field');
 	    this.storeExercises();
-	    reset.clearTable(exercisesTable);
+	    someTable.clearTable(exercisesTable);
 	    this.displayExercises();
 	  }
 	};
@@ -767,6 +765,10 @@
 	$(document).ready(function () {
 	  var newExercise = new Exercise();
 
+	  $('#exercise-submit').on('click', function () {
+	    newExercise.addExercise();
+	  });
+
 	  newExercise.displayExercises();
 
 	  $(document).on('click', '#exercise-trash-icon', function (e) {
@@ -795,14 +797,10 @@
 	  });
 
 	  $("#filter-field").keyup(function () {
+	    var exercisesTable = document.getElementById('all-exercises-table');
 	    someTable = new Table();
 	    someTable.filterItems(exercisesTable, this);
 	  });
-	});
-
-	$('#exercise-submit').on('click', function () {
-	  var newExercise = new Exercise();
-	  newExercise.addExercise();
 	});
 
 	module.exports = Exercise;
