@@ -2,7 +2,7 @@ var assert    = require('chai').assert;
 var webdriver = require('selenium-webdriver');
 var test      = require('selenium-webdriver/testing');
 
-test.describe('testing quantified self foods', function() {
+test.describe('testing quantified self diary page', function() {
     var driver;
   this.timeout(10000);
 
@@ -88,8 +88,35 @@ test.describe('testing quantified self foods', function() {
     driver.findElement({id: 'dinner-table'}).getText().then(function(tableContent){
       assert.equal(tableContent, 'Name Calories\npie 200 test calories\nTotal Calories 200\nRemaining Calories 600')
     });
-
   });
 
+  test.it('User can add a name and calorie amount to snacks table', function() {
 
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    checkBox.click();
+
+    var dinnerButton = driver.findElement({id: 'snacks-btn'});
+    dinnerButton.click();
+
+    driver.findElement({id: 'snacks-table'}).getText().then(function(tableContent){
+      assert.equal(tableContent, 'Name Calories\npie 200 test calories\nTotal Calories 200\nRemaining Calories 0')
+    });
+  });
+
+  test.it('User can add a name and calorie amount to diary exercise table', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'exercise-checkbox-id'});
+    checkBox.click();
+
+    var dinnerButton = driver.findElement({id: 'add-exercise'});
+    dinnerButton.click();
+
+    driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
+      assert.equal(tableContent, 'Name Calories\npushdowns 200 test calories\nTotal Calories 200')
+    });
+  });
 });
