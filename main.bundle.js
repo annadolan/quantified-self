@@ -148,9 +148,6 @@
 	  });
 	}
 
-	displayExerciseData();
-	displayFoodData();
-
 	function changeTextColor(remainingCalories, mealId) {
 	  if (remainingCalories < 0) {
 	    $(mealId).css('color', 'red');
@@ -536,10 +533,11 @@
 	  updateRemainingCalories(0, 0);
 	}
 
-	setTotalsTable();
-	buildDiaryLocalStorage();
-
 	$(document).ready(function () {
+	  displayExerciseData();
+	  displayFoodData();
+	  setTotalsTable();
+	  buildDiaryLocalStorage();
 	  populateExerciseTable();
 	  calculateTotalCalories();
 	});
