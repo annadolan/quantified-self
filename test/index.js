@@ -238,4 +238,19 @@ test.describe('testing quantified self diary page', function() {
       assert.include(tableContent, 'pushdowns 200 test calories')
     });
   });
+
+  test.it('Total calories update when exercise is added to diary exercise table', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'exercise-checkbox-id'});
+    checkBox.click();
+
+    var dinnerButton = driver.findElement({id: 'add-exercise'});
+    dinnerButton.click();
+
+    driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'Total Calories 200')
+    });
+  });
 });
