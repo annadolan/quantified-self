@@ -47,7 +47,7 @@
 	var diaryFoodsTable = document.getElementById('diary-foods-table');
 	var diaryExercisesTable = document.getElementById('diary-exercises-table');
 	var Food = __webpack_require__(1);
-	var Exercise = __webpack_require__(5);
+	var Exercise = __webpack_require__(6);
 	var addExerciseButton = document.getElementById('add-exercise');
 
 	function displayFoodData() {
@@ -58,7 +58,7 @@
 
 	function displayExerciseData() {
 	  JSON.parse(localStorage.getItem('exercise-calories')).forEach(function (element) {
-	    submitExercise(element.exerciseName, element.calorieCount);
+	    submitExercise(element.name, element.calories);
 	  });
 	}
 
@@ -73,6 +73,7 @@
 	  var checkBox = document.createElement('input');
 	  checkBox.type = "checkbox";
 	  checkBox.className = "food-checkbox";
+	  checkBox.id = "food-checkbox-id";
 	  newRow.appendChild(checkBox);
 	  newRow.appendChild(nameCell);
 	  newRow.appendChild(calorieCell);
@@ -86,17 +87,18 @@
 	  });
 	}
 
-	function submitExercise(exerciseName, calorieCount) {
+	function submitExercise(name, calories) {
 	  var newRow = document.createElement('tr');
 	  var nameCell = document.createElement('td');
-	  nameCell.innerText = exerciseName;
+	  nameCell.innerText = name;
 	  nameCell.className = "name-cell";
 	  var calorieCell = document.createElement('td');
-	  calorieCell.innerText = calorieCount;
+	  calorieCell.innerText = calories;
 	  calorieCell.className = "calorie-cell";
 	  var checkBox = document.createElement('input');
 	  checkBox.type = "checkbox";
 	  checkBox.className = "exercise-checkbox";
+	  checkBox.id = "exercise-checkbox-id";
 	  newRow.appendChild(checkBox);
 	  newRow.appendChild(nameCell);
 	  newRow.appendChild(calorieCell);
@@ -476,12 +478,10 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var foodsTable = document.getElementById('foods-table');
-	var trashIcon = document.getElementById('trash-icon');
-	var foodForm = document.getElementById('food-form');
 	var Reset = __webpack_require__(2);
 	var Save = __webpack_require__(3);
-	var View = __webpack_require__(4);
+	var Table = __webpack_require__(4);
+	var Errors = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./errors\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function Food(name, calories) {
 	  this.name = name;
@@ -489,18 +489,22 @@
 	}
 
 	Food.prototype.addFood = function () {
+	  var errors = new Errors();
 	  var reset = new Reset();
-	  reset.emptyErrors(foodForm);
+	  var someTable = new Table();
+	  var foodForm = document.getElementById('food-form');
+	  var foodsTable = document.getElementById('foods-table');
+	  errors.emptyErrors(foodForm);
 	  this.name = $('#foodname').val();
 	  this.calories = $('#caloriecount').val();
 	  if (this.name === "") {
-	    $("#food-error").append("Please enter a food name");
+	    errors.nameError('food');
 	  } else if (this.calories === "") {
-	    $("#calorie-error").append("Please enter a calorie amount");
+	    errors.calorieError();
 	  } else {
 	    reset.clearFields('#foodname', '#caloriecount');
 	    this.storeFoods();
-	    reset.clearTable(foodsTable);
+	    someTable.clearTable(foodsTable);
 	    this.displayFoods();
 	  }
 	};
@@ -566,6 +570,10 @@
 	$(document).ready(function () {
 	  var newFood = new Food();
 
+	  $('#new-food-button').on('click', function () {
+	    newFood.addFood();
+	  });
+
 	  newFood.displayFoods();
 
 	  $(document).on('click', '#trash-icon', function (e) {
@@ -581,7 +589,7 @@
 	    var key = "calories";
 	    var $calories = $(this).html();
 	    var $name = $(this).siblings().html();
-	    editFood = new Food($name, $calories);
+	    var editFood = new Food($name, $calories);
 	    editFood.editValue(this, key);
 	  });
 
@@ -589,19 +597,15 @@
 	    var key = "name";
 	    var $name = $(this).html();
 	    var $calories = $(this).siblings().html();
-	    editFood = new Food($name, $calories);
+	    var editFood = new Food($name, $calories);
 	    editFood.editValue(this, key);
 	  });
 
 	  $("#filter").keyup(function () {
-	    view = new View();
-	    view.filterItems(foodsTable, this);
+	    var foodsTable = document.getElementById('foods-table');
+	    var someTable = new Table();
+	    someTable.filterItems(foodsTable, this);
 	  });
-	});
-
-	$('#new-food-button').on('click', function () {
-	  var newFood = new Food();
-	  newFood.addFood();
 	});
 
 	module.exports = Food;
@@ -612,17 +616,9 @@
 
 	function Reset() {}
 
-	Reset.prototype.emptyErrors = function (idName) {
-	  $(idName).children().children().empty();
-	};
-
 	Reset.prototype.clearFields = function (field1, field2) {
 	  $(field1).val("");
 	  $(field2).val("");
-	};
-
-	Reset.prototype.clearTable = function (table) {
-	  $(`#${table.id} tr:first-child`).nextAll().empty();
 	};
 
 	module.exports = Reset;
@@ -650,9 +646,9 @@
 /* 4 */
 /***/ function(module, exports) {
 
-	function View() {}
+	function Table() {}
 
-	View.prototype.filterItems = function (table, input) {
+	Table.prototype.filterItems = function (table, input) {
 	  var input, filter, table, tr, td, i;
 	  filter = input.value.toUpperCase();
 	  tr = table.getElementsByTagName("tr");
@@ -669,18 +665,21 @@
 	  }
 	};
 
-	module.exports = View;
+	Table.prototype.clearTable = function (table) {
+	  $(`#${table.id} tr:first-child`).nextAll().empty();
+	};
+
+	module.exports = Table;
 
 /***/ },
-/* 5 */
+/* 5 */,
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var exercisesTable = document.getElementById('all-exercises-table');
-	var trashIcon = document.getElementById('trash-icon-ex');
-	var exerciseForm = document.getElementById('exercise-form');
 	var Reset = __webpack_require__(2);
 	var Save = __webpack_require__(3);
-	var View = __webpack_require__(4);
+	var Table = __webpack_require__(4);
+	var Errors = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./errors\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function Exercise(name, calories) {
 	  this.name = name;
@@ -688,18 +687,22 @@
 	}
 
 	Exercise.prototype.addExercise = function () {
+	  var errors = new Errors();
 	  var reset = new Reset();
-	  reset.emptyErrors(exerciseForm);
+	  var someTable = new Table();
+	  var exercisesTable = document.getElementById('all-exercises-table');
+	  var exerciseForm = document.getElementById('exercise-form');
+	  errors.emptyErrors(exerciseForm);
 	  this.name = $('#name-field').val();
 	  this.calories = $('#calorie-field').val();
 	  if (this.name === "") {
-	    $("#exercise-error").append("Please enter an exercise name");
+	    errors.nameError('exercise');
 	  } else if (this.calories === "") {
-	    $("#calories-error").append("Please enter a calorie amount");
+	    errors.calorieError();
 	  } else {
 	    reset.clearFields('#name-field', '#calorie-field');
 	    this.storeExercises();
-	    reset.clearTable(exercisesTable);
+	    someTable.clearTable(exercisesTable);
 	    this.displayExercises();
 	  }
 	};
@@ -765,6 +768,10 @@
 	$(document).ready(function () {
 	  var newExercise = new Exercise();
 
+	  $('#exercise-submit').on('click', function () {
+	    newExercise.addExercise();
+	  });
+
 	  newExercise.displayExercises();
 
 	  $(document).on('click', '#exercise-trash-icon', function (e) {
@@ -793,14 +800,10 @@
 	  });
 
 	  $("#filter-field").keyup(function () {
-	    view = new View();
-	    view.filterItems(exercisesTable, this);
+	    var exercisesTable = document.getElementById('all-exercises-table');
+	    someTable = new Table();
+	    someTable.filterItems(exercisesTable, this);
 	  });
-	});
-
-	$('#exercise-submit').on('click', function () {
-	  var newExercise = new Exercise();
-	  newExercise.addExercise();
 	});
 
 	module.exports = Exercise;

@@ -168,8 +168,8 @@ test.describe('testing quantified self exercises', function() {
       var submitButton = driver.findElement({id: 'exercise-submit'});
       submitButton.click()
 
-      driver.findElement({id: 'exercise-error'}).getText().then(function(errorMessage){
-        assert.equal(errorMessage, 'Please enter an exercise name')
+      driver.findElement({id: 'name-error'}).getText().then(function(errorMessage){
+        assert.equal(errorMessage, 'Please enter exercise name')
       });
 
       driver.findElement({id: 'all-exercises-table'}).getText().then(function(tableContent){
@@ -230,8 +230,8 @@ test.describe('testing quantified self exercises', function() {
     var submitButton = driver.findElement({id: 'exercise-submit'});
     submitButton.click()
 
-    driver.findElement({id: 'exercise-error'}).getText().then(function(errorMessage){
-      assert.equal(errorMessage, 'Please enter an exercise name')
+    driver.findElement({id: 'name-error'}).getText().then(function(errorMessage){
+      assert.equal(errorMessage, 'Please enter exercise name')
     });
 
     exerciseName.sendKeys('Karate');
@@ -243,7 +243,7 @@ test.describe('testing quantified self exercises', function() {
       assert.equal(nameCell, 'Karate')
     });
 
-    driver.findElement({id: 'exercise-error'}).getText().then(function(errorMessage){
+    driver.findElement({id: 'name-error'}).getText().then(function(errorMessage){
       assert.equal(errorMessage, '')
     });
   });
