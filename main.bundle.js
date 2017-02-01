@@ -53,6 +53,9 @@
 
 	function displayFoodData() {
 	  var foods = JSON.parse(localStorage.getItem('foods'));
+	  if (foods === null) {
+	    foods = [];
+	  }
 	  foods.forEach(function (object) {
 	    $('#diary-foods-table tr:first-child').after(`<tr>
 	      <td class='name-cell'>${object.name}</td>
@@ -75,15 +78,6 @@
 	  pageDate = pageDate.replace(dateNumbers, date.inWords(dateNumbers));
 	  return pageDate;
 	}
-
-	// function fillExerciseTable() {
-	//   var totalCalsCell = document.getElementById('exercise-total-cals')
-	//   var pageDate = formatDateKey();
-	//   var currentDayLocalStorage = localStorage.getItem(pageDate);
-	//   var currentDiary = JSON.parse(currentDayLocalStorage);
-	//   totalCalsCell.innerText = currentDiary[0].totalCalories
-	// }
-
 
 	function initialTableFiller() {
 	  var someTable = new Table();
@@ -133,6 +127,9 @@
 
 	function displayExerciseData() {
 	  var exercises = JSON.parse(localStorage.getItem('exercise-calories'));
+	  if (exercises === null) {
+	    exercises = [];
+	  }
 	  exercises.forEach(function (object) {
 	    $('#diary-exercises-table tr:first-child').after(`<tr>
 	      <td class='name-cell'>${object.name}</td>
@@ -141,6 +138,7 @@
 	      </tr>`);
 	  });
 	}
+
 	function uncheckFoodCheckboxes() {
 	  $(".food-checkbox").each(function () {
 	    ;
