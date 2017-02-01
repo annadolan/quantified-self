@@ -47,25 +47,9 @@
 	var Food = __webpack_require__(1);
 	var Exercise = __webpack_require__(7);
 	var Table = __webpack_require__(4);
+	var Dates = __webpack_require__(8);
 
 	var count = 0;
-
-	// generate variable names
-	function inWords(num) {
-	  var a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
-	  var b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-
-	  if ((num = num.toString()).length > 9) return 'overflow';
-	  n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-	  if (!n) return;var str = '';
-	  str += n[1] != 0 ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore' : '';
-	  str += n[2] != 0 ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh' : '';
-	  str += n[3] != 0 ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand' : '';
-	  str += n[4] != 0 ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred' : '';
-	  str += n[5] != 0 ? (str != '' ? '' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + '' : '';
-	  str = str.replace(/\s+/g, '');
-	  return str;
-	}
 
 	function displayFoodData() {
 	  var foods = JSON.parse(localStorage.getItem('foods'));
@@ -80,6 +64,7 @@
 	}
 
 	function formatDateKey() {
+	  var date = new Dates();
 	  var pageDate = document.getElementById('diary-today').innerText;
 	  pageDate = pageDate.replace(" ", "");
 	  pageDate = pageDate.replace(", ", "");
@@ -87,62 +72,27 @@
 	  var numberPattern = /\d+/g;
 	  dateNumbers = pageDate.match(numberPattern)[0];
 
-	  pageDate = pageDate.replace(dateNumbers, inWords(dateNumbers));
+	  pageDate = pageDate.replace(dateNumbers, date.inWords(dateNumbers));
 	  return pageDate;
 	}
 
-	function fillExerciseTable() {
-	  var totalCalsCell = document.getElementById('exercise-total-cals');
-	  var pageDate = formatDateKey();
-	  var currentDayLocalStorage = localStorage.getItem(pageDate);
-	  var currentDiary = JSON.parse(currentDayLocalStorage);
-	  totalCalsCell.innerText = currentDiary[0].totalCalories;
-	}
+	// function fillExerciseTable() {
+	//   var totalCalsCell = document.getElementById('exercise-total-cals')
+	//   var pageDate = formatDateKey();
+	//   var currentDayLocalStorage = localStorage.getItem(pageDate);
+	//   var currentDiary = JSON.parse(currentDayLocalStorage);
+	//   totalCalsCell.innerText = currentDiary[0].totalCalories
+	// }
 
-	function fillBreakfastTable() {
-	  var totalCalsCell = document.getElementById('breakfast-total-cals');
-	  var remainingCalsCell = document.getElementById('breakfast-remaining-cals');
-	  var pageDate = formatDateKey();
-	  var currentDayLocalStorage = localStorage.getItem(pageDate);
-	  var currentDiary = JSON.parse(currentDayLocalStorage);
-	  totalCalsCell.innerText = currentDiary[1].totalCalories;
-	  remainingCalsCell.innerText = currentDiary[1].remainingCalories;
-	}
-
-	function fillLunchTable() {
-	  var totalCalsCell = document.getElementById('lunch-total-cals');
-	  var remainingCalsCell = document.getElementById('lunch-remaining-cals');
-	  var pageDate = formatDateKey();
-	  var currentDayLocalStorage = localStorage.getItem(pageDate);
-	  var currentDiary = JSON.parse(currentDayLocalStorage);
-	  totalCalsCell.innerText = currentDiary[2].totalCalories;
-	  remainingCalsCell.innerText = currentDiary[2].remainingCalories;
-	}
-	function fillDinnerTable() {
-	  var totalCalsCell = document.getElementById('dinner-total-cals');
-	  var remainingCalsCell = document.getElementById('dinner-remaining-cals');
-	  var pageDate = formatDateKey();
-	  var currentDayLocalStorage = localStorage.getItem(pageDate);
-	  var currentDiary = JSON.parse(currentDayLocalStorage);
-	  totalCalsCell.innerText = currentDiary[3].totalCalories;
-	  remainingCalsCell.innerText = currentDiary[3].remainingCalories;
-	}
-	function fillSnacksTable() {
-	  var totalCalsCell = document.getElementById('snacks-total-cals');
-	  var remainingCalsCell = document.getElementById('snacks-remaining-cals');
-	  var pageDate = formatDateKey();
-	  var currentDayLocalStorage = localStorage.getItem(pageDate);
-	  var currentDiary = JSON.parse(currentDayLocalStorage);
-	  totalCalsCell.innerText = currentDiary[4].totalCalories;
-	  remainingCalsCell.innerText = currentDiary[4].remainingCalories;
-	}
 
 	function initialTableFiller() {
-	  fillExerciseTable();
-	  fillBreakfastTable();
-	  fillLunchTable();
-	  fillDinnerTable();
-	  fillSnacksTable();
+	  var someTable = new Table();
+	  var pageDate = formatDateKey();
+	  someTable.fillExerciseTable(pageDate);
+	  someTable.fillMealTable('breakfast-total-cals', 'breakfast-remaining-cals', 1, pageDate);
+	  someTable.fillMealTable('lunch-total-cals', 'lunch-remaining-cals', 2, pageDate);
+	  someTable.fillMealTable('dinner-total-cals', 'dinner-remaining-cals', 3, pageDate);
+	  someTable.fillMealTable('snacks-total-cals', 'snacks-remaining-cals', 4, pageDate);
 	  // fillTotalsTable();
 	}
 
@@ -295,13 +245,12 @@
 	      var eCalories = exercises[i].previousElementSibling.innerText;
 	      // populateExerciseTable(eName, eCalories);
 	      addExerciseDataToLocalStorage(eName, eCalories);
-	      calculateTotalCalories();
 	      updateRemainingCalories(eCalories, 0);
 	      exercises[i].childNodes[0].checked = false;
 	    }
 	  }
 	  populateExerciseTable();
-	  // calculateTotalCalories();
+	  calculateTotalCalories();
 	}
 
 	function populateExerciseTable() {
@@ -337,7 +286,6 @@
 
 	  $(".exercise-calorie-cell").each(function () {
 	    ;
-	    debugger;
 	    totalCalories += parseFloat(this.innerText);
 	  });
 	  totalCalorieCell.innerText = totalCalories;
@@ -769,6 +717,7 @@
 /* 4 */
 /***/ function(module, exports) {
 
+	
 	function Table() {}
 
 	Table.prototype.filterItems = function (table, input) {
@@ -790,6 +739,22 @@
 
 	Table.prototype.clearTable = function (table) {
 	  $(`#${table.id} tr:first-child`).nextAll().empty();
+	};
+
+	Table.prototype.fillMealTable = function (totalCalsID, remainingCalsID, arrayPosition, pageDate) {
+	  var totalCalsCell = document.getElementById(totalCalsID);
+	  var remainingCalsCell = document.getElementById(remainingCalsID);
+	  var currentDayLocalStorage = localStorage.getItem(pageDate);
+	  var currentDiary = JSON.parse(currentDayLocalStorage);
+	  totalCalsCell.innerText = currentDiary[arrayPosition].totalCalories;
+	  remainingCalsCell.innerText = currentDiary[arrayPosition].remainingCalories;
+	};
+
+	Table.prototype.fillExerciseTable = function (pageDate) {
+	  var totalCalsCell = document.getElementById('exercise-total-cals');
+	  var currentDayLocalStorage = localStorage.getItem(pageDate);
+	  var currentDiary = JSON.parse(currentDayLocalStorage);
+	  totalCalsCell.innerText = currentDiary[0].totalCalories;
 	};
 
 	module.exports = Table;
@@ -11175,6 +11140,30 @@
 	});
 
 	module.exports = Exercise;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	function Dates() {}
+
+	Dates.prototype.inWords = function (num) {
+	    var a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+	    var b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+	    if ((num = num.toString()).length > 9) return 'overflow';
+	    n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+	    if (!n) return;var str = '';
+	    str += n[1] != 0 ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore' : '';
+	    str += n[2] != 0 ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh' : '';
+	    str += n[3] != 0 ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand' : '';
+	    str += n[4] != 0 ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred' : '';
+	    str += n[5] != 0 ? (str != '' ? '' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + '' : '';
+	    str = str.replace(/\s+/g, '');
+	    return str;
+	};
+
+	module.exports = Dates;
 
 /***/ }
 /******/ ]);
