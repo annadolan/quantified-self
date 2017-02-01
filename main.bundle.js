@@ -47,7 +47,7 @@
 	var diaryFoodsTable = document.getElementById('diary-foods-table');
 	var diaryExercisesTable = document.getElementById('diary-exercises-table');
 	var Food = __webpack_require__(1);
-	var Exercise = __webpack_require__(5);
+	var Exercise = __webpack_require__(6);
 	var addExerciseButton = document.getElementById('add-exercise');
 
 	function displayFoodData() {
@@ -481,6 +481,7 @@
 	var Reset = __webpack_require__(2);
 	var Save = __webpack_require__(3);
 	var Table = __webpack_require__(4);
+	var Errors = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./errors\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function Food(name, calories) {
 	  this.name = name;
@@ -497,9 +498,9 @@
 	  this.name = $('#foodname').val();
 	  this.calories = $('#caloriecount').val();
 	  if (this.name === "") {
-	    $("#food-error").append("Please enter a food name");
+	    errors.nameError('food');
 	  } else if (this.calories === "") {
-	    $("#calorie-error").append("Please enter a calorie amount");
+	    errors.calorieError();
 	  } else {
 	    reset.clearFields('#foodname', '#caloriecount');
 	    this.storeFoods();
@@ -671,12 +672,14 @@
 	module.exports = Table;
 
 /***/ },
-/* 5 */
+/* 5 */,
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Reset = __webpack_require__(2);
 	var Save = __webpack_require__(3);
 	var Table = __webpack_require__(4);
+	var Errors = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./errors\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function Exercise(name, calories) {
 	  this.name = name;
@@ -693,9 +696,9 @@
 	  this.name = $('#name-field').val();
 	  this.calories = $('#calorie-field').val();
 	  if (this.name === "") {
-	    $("#exercise-error").append("Please enter an exercise name");
+	    errors.nameError('exercise');
 	  } else if (this.calories === "") {
-	    $("#calories-error").append("Please enter a calorie amount");
+	    errors.calorieError();
 	  } else {
 	    reset.clearFields('#name-field', '#calorie-field');
 	    this.storeExercises();

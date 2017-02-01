@@ -138,8 +138,8 @@ test.describe('testing quantified self foods', function() {
       var submitButton = driver.findElement({id: 'new-food-button'});
       submitButton.click()
 
-      driver.findElement(webdriver.By.id('food-error')).getText().then(function(foodError){
-        assert.equal(foodError, 'Please enter a food name')
+      driver.findElement(webdriver.By.id('name-error')).getText().then(function(foodError){
+        assert.equal(foodError, 'Please enter food name')
       });
 
       driver.findElement({id: 'foods-table'}).getText().then(function(tableContent){
@@ -155,7 +155,7 @@ test.describe('testing quantified self foods', function() {
       var submitButton = driver.findElement({id: 'new-food-button'});
       submitButton.click()
 
-      driver.findElement(webdriver.By.id('calorie-error')).getText().then(function(calorieError){
+      driver.findElement(webdriver.By.id('calories-error')).getText().then(function(calorieError){
         assert.equal(calorieError, 'Please enter a calorie amount')
       });
 
@@ -173,7 +173,7 @@ test.describe('testing quantified self foods', function() {
     var submitButton = driver.findElement({id: 'new-food-button'});
     submitButton.click()
 
-    driver.findElement(webdriver.By.id('calorie-error')).getText().then(function(errorMessage){
+    driver.findElement(webdriver.By.id('calories-error')).getText().then(function(errorMessage){
       assert.equal(errorMessage, 'Please enter a calorie amount')
     });
 
@@ -186,7 +186,7 @@ test.describe('testing quantified self foods', function() {
       assert.equal(nameCell, 'coconut')
     });
 
-    driver.findElement(webdriver.By.id('calorie-error')).getText().then(function(calorieError){
+    driver.findElement(webdriver.By.id('calories-error')).getText().then(function(calorieError){
       assert.equal(calorieError, '', '')
     });
   });
@@ -200,8 +200,8 @@ test.describe('testing quantified self foods', function() {
     var submitButton = driver.findElement({id: 'new-food-button'});
     submitButton.click()
 
-    driver.findElement(webdriver.By.id('food-error')).getText().then(function(foodError){
-      assert.equal(foodError, 'Please enter a food name')
+    driver.findElement(webdriver.By.id('name-error')).getText().then(function(foodError){
+      assert.equal(foodError, 'Please enter food name')
     });
 
     exerciseName.sendKeys('Cat food');
@@ -213,7 +213,7 @@ test.describe('testing quantified self foods', function() {
       assert.equal(nameCell, 'Cat food')
     });
 
-    driver.findElement(webdriver.By.id('food-error')).getText().then(function(errorMessage){
+    driver.findElement(webdriver.By.id('name-error')).getText().then(function(errorMessage){
       assert.equal(errorMessage, '', '')
     });
   });
