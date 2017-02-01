@@ -55,9 +55,23 @@ test.describe('testing quantified self diary page', function() {
     breakfastButton.click();
 
     driver.findElement({id: 'breakfast-table'}).getText().then(function(tableContent){
-      assert.equal(tableContent, 'Name Calories\npie 200 test calories\nTotal Calories 200\nRemaining Calories 200')
+      assert.include(tableContent, 'pie 200 test calories')
     });
+  });
 
+  test.it('Total and remaining calories update when food is added to breakfast table', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    checkBox.click();
+
+    var breakfastButton = driver.findElement({id: 'breakfast-btn'});
+    breakfastButton.click();
+
+    driver.findElement({id: 'breakfast-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'Total Calories 200\nRemaining Calories 200')
+    });
   });
 
   test.it('User can add a name and calorie amount to lunch table', function() {
@@ -71,7 +85,22 @@ test.describe('testing quantified self diary page', function() {
     lunchButton.click();
 
     driver.findElement({id: 'lunch-table'}).getText().then(function(tableContent){
-      assert.equal(tableContent, 'Name Calories\npie 200 test calories\nTotal Calories 200\nRemaining Calories 400')
+      assert.include(tableContent, 'pie 200 test calories')
+    });
+  });
+
+  test.it('Total and remaining calories update when food is added to lunch table', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    checkBox.click();
+
+    var lunchButton = driver.findElement({id: 'lunch-btn'});
+    lunchButton.click();
+
+    driver.findElement({id: 'lunch-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'Total Calories 200\nRemaining Calories 400')
     });
   });
 
@@ -86,7 +115,22 @@ test.describe('testing quantified self diary page', function() {
     dinnerButton.click();
 
     driver.findElement({id: 'dinner-table'}).getText().then(function(tableContent){
-      assert.equal(tableContent, 'Name Calories\npie 200 test calories\nTotal Calories 200\nRemaining Calories 600')
+      assert.include(tableContent, 'pie 200 test calories')
+    });
+  });
+
+  test.it('Total and remaining calories update when food is added to dinner table', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    checkBox.click();
+
+    var dinnerButton = driver.findElement({id: 'dinner-btn'});
+    dinnerButton.click();
+
+    driver.findElement({id: 'dinner-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'Total Calories 200\nRemaining Calories 600')
     });
   });
 
@@ -97,11 +141,26 @@ test.describe('testing quantified self diary page', function() {
     var checkBox = driver.findElement({id: 'food-checkbox-id'});
     checkBox.click();
 
-    var dinnerButton = driver.findElement({id: 'snacks-btn'});
-    dinnerButton.click();
+    var snacksButton = driver.findElement({id: 'snacks-btn'});
+    snacksButton.click();
 
     driver.findElement({id: 'snacks-table'}).getText().then(function(tableContent){
-      assert.equal(tableContent, 'Name Calories\npie 200 test calories\nTotal Calories 200\nRemaining Calories 0')
+      assert.include(tableContent, 'pie 200 test calories')
+    });
+  });
+
+  test.it('Total and remaining calories update when food is added to snacks table', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    checkBox.click();
+
+    var snacksButton = driver.findElement({id: 'snacks-btn'});
+    snacksButton.click();
+
+    driver.findElement({id: 'snacks-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'Total Calories 200\nRemaining Calories 0')
     });
   });
 
@@ -116,7 +175,7 @@ test.describe('testing quantified self diary page', function() {
     dinnerButton.click();
 
     driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
-      assert.equal(tableContent, 'Name Calories\npushdowns 200 test calories\nTotal Calories 200')
+      assert.include(tableContent, 'pushdowns 200 test calories')
     });
   });
 });
