@@ -186,14 +186,14 @@
           <input type="button" class="btn btn-info" id="lunch-btn" value="Lunch"></p>
           <p><input type="button" class="btn btn-info" id="dinner-btn" value="Dinner">
             <input type="button" class="btn btn-info" id="snacks-btn" value="Snacks"></p>
-            <div class="form-inline">Filter by Name:
+            <div class="form-inline">Search by Name:
               <input id="food-diary-filter" class="form-control">
               <p>
               </div>
               <table id="diary-foods-table" class="table table-bordered">
                 <tr class="active">
                   <th></th>
-                  <th>Food</th>
+                  <th>Name</th>
                   <th>Calories</th>
                 </tr>
               </table>
@@ -207,11 +207,16 @@
             </div>
             <div class="panel-body">
               <p><input type="button" class="btn btn-info" id="create-new-exercise" value="Create New" onclick="location.href = './exercises.html';">
-                <input type="button" class="btn btn-info" id="add-exercise" value="Add Exercise"></p>
+                <input type="button" class="btn btn-info" id="add-exercise" value="Add Selected"></p>
+                <div class="form-inline">Search by Name:
+                  <input id="exercises-diary-filter" class="form-control">
+                  <p>
+                  </div>
+
                 <table id="diary-exercises-table" class="table table-bordered">
                   <tr class="active">
                     <th></th>
-                    <th>Food</th>
+                    <th>Name</th>
                     <th>Calories</th>
                   </tr>
                 </table>
