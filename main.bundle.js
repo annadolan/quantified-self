@@ -478,10 +478,10 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Reset = __webpack_require__(2);
-	var Save = __webpack_require__(3);
+	var Form = __webpack_require__(2);
+	var Saver = __webpack_require__(3);
 	var Table = __webpack_require__(4);
-	var Errors = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./errors\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var Errors = __webpack_require__(5);
 
 	function Food(name, calories) {
 	  this.name = name;
@@ -490,7 +490,7 @@
 
 	Food.prototype.addFood = function () {
 	  var errors = new Errors();
-	  var reset = new Reset();
+	  var form = new Form();
 	  var someTable = new Table();
 	  var foodForm = document.getElementById('food-form');
 	  var foodsTable = document.getElementById('foods-table');
@@ -502,7 +502,7 @@
 	  } else if (this.calories === "") {
 	    errors.calorieError();
 	  } else {
-	    reset.clearFields('#foodname', '#caloriecount');
+	    form.clearFields('#foodname', '#caloriecount');
 	    this.storeFoods();
 	    someTable.clearTable(foodsTable);
 	    this.displayFoods();
@@ -526,7 +526,7 @@
 	  var name = this.name;
 	  var calories = this.calories;
 	  var type = 'foods';
-	  var save = new Save();
+	  var saver = new Saver();
 	  obj.contentEditable = true;
 	  clickedEntry = obj;
 	  var originalKey = obj.innerText;
@@ -535,13 +535,13 @@
 	    if (event.keyCode == 13) {
 	      var newKey = obj.innerText;
 	      obj.contentEditable = false;
-	      save.setLocalStorage(key, newKey, name, calories, type);
+	      saver.setLocalStorage(key, newKey, name, calories, type);
 	    }
 	  });
 	  $(document).click(function (e) {
 	    var newKey = clickedEntry.innerText;
 	    clickedEntry.contentEditable = false;
-	    save.setLocalStorage(key, newKey, name, calories, type);
+	    saver.setLocalStorage(key, newKey, name, calories, type);
 	  });
 	};
 
@@ -614,22 +614,22 @@
 /* 2 */
 /***/ function(module, exports) {
 
-	function Reset() {}
+	function Form() {}
 
-	Reset.prototype.clearFields = function (field1, field2) {
+	Form.prototype.clearFields = function (field1, field2) {
 	  $(field1).val("");
 	  $(field2).val("");
 	};
 
-	module.exports = Reset;
+	module.exports = Form;
 
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
 
-	function Save() {}
+	function Saver() {}
 
-	Save.prototype.setLocalStorage = function (key, newKey, name, calories, type) {
+	Saver.prototype.setLocalStorage = function (key, newKey, name, calories, type) {
 	  var array = JSON.parse(localStorage.getItem(type));
 	  array.forEach(function (object) {
 	    if (object.name === name && object.calories === calories) {
@@ -640,7 +640,7 @@
 	  });
 	};
 
-	module.exports = Save;
+	module.exports = Saver;
 
 /***/ },
 /* 4 */
@@ -672,14 +672,33 @@
 	module.exports = Table;
 
 /***/ },
-/* 5 */,
+/* 5 */
+/***/ function(module, exports) {
+
+	function Errors() {}
+
+	Errors.prototype.emptyErrors = function (idName) {
+	  $(idName).children().children().empty();
+	};
+
+	Errors.prototype.nameError = function (type) {
+	  $("#name-error").append("Please enter " + type + " name");
+	};
+
+	Errors.prototype.calorieError = function (type) {
+	  $("#calories-error").append("Please enter a calorie amount");
+	};
+
+	module.exports = Errors;
+
+/***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Reset = __webpack_require__(2);
-	var Save = __webpack_require__(3);
+	var Form = __webpack_require__(2);
+	var Saver = __webpack_require__(3);
 	var Table = __webpack_require__(4);
-	var Errors = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./errors\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var Errors = __webpack_require__(5);
 
 	function Exercise(name, calories) {
 	  this.name = name;
@@ -688,8 +707,8 @@
 
 	Exercise.prototype.addExercise = function () {
 	  var errors = new Errors();
-	  var reset = new Reset();
-	  var someTable = new Table();
+	  var form = new Form();
+	  var table = new Table();
 	  var exercisesTable = document.getElementById('all-exercises-table');
 	  var exerciseForm = document.getElementById('exercise-form');
 	  errors.emptyErrors(exerciseForm);
@@ -700,9 +719,9 @@
 	  } else if (this.calories === "") {
 	    errors.calorieError();
 	  } else {
-	    reset.clearFields('#name-field', '#calorie-field');
+	    form.clearFields('#name-field', '#calorie-field');
 	    this.storeExercises();
-	    someTable.clearTable(exercisesTable);
+	    table.clearTable(exercisesTable);
 	    this.displayExercises();
 	  }
 	};
@@ -724,7 +743,7 @@
 	  var name = this.name;
 	  var calories = this.calories;
 	  var type = 'exercise-calories';
-	  var save = new Save();
+	  var saver = new Saver();
 	  obj.contentEditable = true;
 	  clickedEntry = obj;
 	  var originalKey = obj.innerText;
@@ -733,13 +752,13 @@
 	    if (event.keyCode == 13) {
 	      var newKey = obj.innerText;
 	      obj.contentEditable = false;
-	      save.setLocalStorage(key, newKey, name, calories, type);
+	      saver.setLocalStorage(key, newKey, name, calories, type);
 	    }
 	  });
 	  $(document).click(function (e) {
 	    var newKey = clickedEntry.innerText;
 	    clickedEntry.contentEditable = false;
-	    save.setLocalStorage(key, newKey, name, calories, type);
+	    saver.setLocalStorage(key, newKey, name, calories, type);
 	  });
 	};
 
