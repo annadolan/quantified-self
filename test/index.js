@@ -253,4 +253,58 @@ test.describe('testing quantified self diary page', function() {
       assert.include(tableContent, 'Total Calories 200')
     });
   });
+
+  test.it('Totals table updates with calories consumed', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    var breakfastButton = driver.findElement({id: 'breakfast-btn'});
+
+    checkBox.click();
+    breakfastButton.click();
+    checkBox.click();
+    breakfastButton.click();
+
+
+    driver.findElement({id: 'totals-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'Calories Consumed 400')
+    });
+  });
+
+  test.it('Totals table updates with calories burned', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBoxEx = driver.findElement({id: 'exercise-checkbox-id'});
+    var exerciseButton = driver.findElement({id: 'add-exercise'})
+
+    checkBoxEx.click();
+    exerciseButton.click();
+
+    driver.findElement({id: 'totals-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'Calories Burned 200')
+    });
+  });
+
+  test.it('Totals table updates with calorie total', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBoxEx = driver.findElement({id: 'exercise-checkbox-id'});
+    var exerciseButton = driver.findElement({id: 'add-exercise'})
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    var breakfastButton = driver.findElement({id: 'breakfast-btn'});
+
+    checkBoxEx.click();
+    exerciseButton.click();
+    checkBox.click();
+    breakfastButton.click();
+    checkBox.click();
+    breakfastButton.click();
+
+    driver.findElement({id: 'totals-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'Remaining Calories 1800')
+    });
+  });
 });
