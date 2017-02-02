@@ -430,4 +430,146 @@ test.describe('testing quantified self diary page', function() {
     })
   });
 
+  test.it('User can delete a food from a meal table', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    var breakfastButton = driver.findElement({id: 'breakfast-btn'});
+
+    checkBox.click();
+    breakfastButton.click();
+
+    driver.findElement({id: 'breakfast-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'pie 200 test calories')
+    });
+
+    var deleteIcon = driver.findElement({id: 'meal-trash-icon'});
+    deleteIcon.click()
+
+    driver.findElement({id: 'breakfast-table'}).getText().then(function(tableContent){
+      assert.notInclude(tableContent, 'pie 200 test calories')
+    });
+  });
+
+  test.it('User can delete a food from an exercise table', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBoxEx = driver.findElement({id: 'exercise-checkbox-id'});
+    var exerciseButton = driver.findElement({id: 'add-exercise'})
+
+    checkBoxEx.click();
+    exerciseButton.click();
+
+    driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'pushdowns 200 test calories')
+    });
+
+    var deleteIcon = driver.findElement({id: 'exercise-trash-icon'});
+    deleteIcon.click()
+
+    driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
+      assert.notInclude(tableContent, 'pushdowns 200 test calories')
+    });
+  });
+
+  test.it('Foods added to diary tables persist after refresh', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    var breakfastButton = driver.findElement({id: 'breakfast-btn'});
+
+    checkBox.click();
+    breakfastButton.click();
+
+    driver.findElement({id: 'breakfast-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'pie 200 test calories')
+    });
+
+    driver.get('http://localhost:8080');
+
+    driver.findElement({id: 'breakfast-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'pie 200 test calories')
+    });
+  });
+
+  test.it('Exercises added to diary table persist after refresh', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'exercise-checkbox-id'});
+    checkBox.click();
+
+    var exerciseButton = driver.findElement({id: 'add-exercise'});
+    exerciseButton.click();
+
+    driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'pushdowns 200 test calories')
+    });
+
+    driver.get('http://localhost:8080');
+
+    driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'pushdowns 200 test calories')
+    });
+  });
+
+  test.it('Deletions from meal table persist after refresh', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBox = driver.findElement({id: 'food-checkbox-id'});
+    var breakfastButton = driver.findElement({id: 'breakfast-btn'});
+
+    checkBox.click();
+    breakfastButton.click();
+
+    driver.findElement({id: 'breakfast-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'pie 200 test calories')
+    });
+
+    var deleteIcon = driver.findElement({id: 'meal-trash-icon'});
+    deleteIcon.click()
+
+    driver.findElement({id: 'breakfast-table'}).getText().then(function(tableContent){
+      assert.notInclude(tableContent, 'pie 200 test calories')
+    });
+
+    driver.get('http://localhost:8080');
+
+    driver.findElement({id: 'breakfast-table'}).getText().then(function(tableContent){
+      assert.notInclude(tableContent, 'pie 200 test calories')
+    });
+  });
+
+  test.it('Deletions from exercise table persist after refresh', function() {
+
+    driver.get('http://localhost:8080');
+
+    var checkBoxEx = driver.findElement({id: 'exercise-checkbox-id'});
+    var exerciseButton = driver.findElement({id: 'add-exercise'})
+
+    checkBoxEx.click();
+    exerciseButton.click();
+
+    driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
+      assert.include(tableContent, 'pushdowns 200 test calories')
+    });
+
+    var deleteIcon = driver.findElement({id: 'exercise-trash-icon'});
+    deleteIcon.click()
+
+    driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
+      assert.notInclude(tableContent, 'pushdowns 200 test calories')
+    });
+
+    driver.get('http://localhost:8080');
+
+    driver.findElement({id: 'exercise-table'}).getText().then(function(tableContent){
+      assert.notInclude(tableContent, 'pushdowns 200 test calories')
+    });
+  });
+
 });

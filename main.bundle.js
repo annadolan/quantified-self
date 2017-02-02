@@ -272,6 +272,18 @@
 	  });
 	}
 
+	$('#sort-exercises').on('click', function () {
+	  thisTable = document.getElementById('diary-exercises-table');
+	  someTable = new Table();
+	  someTable.sortTable(thisTable);
+	});
+
+	$('#sort-food').on('click', function () {
+	  thisTable = document.getElementById('diary-foods-table');
+	  someTable = new Table();
+	  someTable.sortTable(thisTable);
+	});
+
 	$("#diary-tomorrow").on('click', function () {
 	  count += 1;
 	  dateToday(count);
@@ -844,6 +856,50 @@
 	        tr[i].style.display = "";
 	      } else {
 	        tr[i].style.display = "none";
+	      }
+	    }
+	  }
+	};
+
+	Table.prototype.sortTable = function (table) {
+	  var table,
+	      rows,
+	      switching,
+	      i,
+	      x,
+	      y,
+	      shouldSwitch,
+	      dir,
+	      switchcount = 0;
+	  switching = true;
+	  dir = "asc";
+	  while (switching) {
+	    switching = false;
+	    rows = table.getElementsByTagName("TR");
+	    for (i = 1; i < rows.length - 1; i++) {
+	      shouldSwitch = false;
+	      x = rows[i].getElementsByTagName("TD")[1];
+	      y = rows[i + 1].getElementsByTagName("TD")[1];
+	      if (dir == "asc") {
+	        if (parseInt(x.innerText) > parseInt(y.innerText)) {
+	          shouldSwitch = true;
+	          break;
+	        }
+	      } else if (dir == "desc") {
+	        if (parseInt(x.innerText) < parseInt(y.innerText)) {
+	          shouldSwitch = true;
+	          break;
+	        }
+	      }
+	    }
+	    if (shouldSwitch) {
+	      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+	      switching = true;
+	      switchcount++;
+	    } else {
+	      if (switchcount == 0 && dir == "asc") {
+	        dir = "desc";
+	        switching = true;
 	      }
 	    }
 	  }
