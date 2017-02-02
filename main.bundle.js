@@ -327,7 +327,7 @@
 	  clearAllTables();
 	  populateAllTables();
 	  calculateTotalCalories();
-	  // clear all meal totals
+	  calculateTotals();
 	});
 
 	$("#diary-yesterday").on('click', function () {
@@ -337,6 +337,8 @@
 	  clearAllTables();
 	  populateAllTables();
 	  calculateTotalCalories();
+	  calculateTotals();
+
 	  // persistInLocalStorage();
 	});
 
@@ -470,7 +472,7 @@
 	        addMealDataToLocalStorage(fName, fCalories, 1);
 	        populateBreakfastTable();
 	        calculateTotalBreakfastCalories();
-	        // updateCaloriesConsumed();
+	        updateCaloriesConsumed();
 	        updateTotalsTable(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "lunch-btn") {
@@ -478,7 +480,7 @@
 	        addMealDataToLocalStorage(fName, fCalories, 2);
 	        populateLunchTable();
 	        calculateTotalLunchCalories();
-	        // updateCaloriesConsumed();
+	        updateCaloriesConsumed();
 	        updateTotalsTable(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "dinner-btn") {
@@ -486,7 +488,7 @@
 	        addMealDataToLocalStorage(fName, fCalories, 3);
 	        populateDinnerTable();
 	        calculateTotalDinnerCalories();
-	        // updateCaloriesConsumed();
+	        updateCaloriesConsumed();
 	        updateTotalsTable(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "snacks-btn") {
@@ -494,7 +496,7 @@
 	        addMealDataToLocalStorage(fName, fCalories, 4);
 	        populateSnacksTable();
 	        calculateTotalSnackCalories();
-	        // updateCaloriesConsumed();
+	        updateCaloriesConsumed();
 	        updateTotalsTable(0, fCalories);
 	      }
 	    }
