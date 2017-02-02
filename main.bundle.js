@@ -87,7 +87,6 @@
 	  someTable.fillMealTable('lunch-total-cals', 'lunch-remaining-cals', 2, pageDate);
 	  someTable.fillMealTable('dinner-total-cals', 'dinner-remaining-cals', 3, pageDate);
 	  someTable.fillMealTable('snacks-total-cals', 'snacks-remaining-cals', 4, pageDate);
-	  // fillTotalsTable();
 	}
 
 	function buildDiaryLocalStorage() {
@@ -201,6 +200,42 @@
 	  }
 	}
 
+	function updateTotalsTable(additionalCalories, negativeCalories) {
+	  var goalCaloriesCell = document.getElementById('goal-calories');
+	  var caloriesConsumedCell = document.getElementById('calories-consumed');
+	  var caloriesBurnedCell = document.getElementById('calories-burned');
+	  var remainingCaloriesCell = document.getElementById('remaining-calories');
+	  var exercisesTableTotal = document.getElementById('exercise-total-cals');
+
+	  var pageDate = formatDateKey();
+	  var currentDayLocalStorage = localStorage.getItem(pageDate);
+	  var currentDiary = JSON.parse(currentDayLocalStorage);
+	  currentDiary[5].caloriesBurned = exercisesTableTotal.innerText;
+
+	  currentDiary[5].caloriesConsumed = updateCaloriesConsumed();
+
+	  currentDiary[5].remainingCalories = updateRemainingCalories(additionalCalories, negativeCalories);
+
+	  diaryJSON = JSON.stringify(currentDiary);
+	  localStorage.setItem(pageDate, diaryJSON);
+	  populateTotalsTable();
+	}
+
+	function populateTotalsTable() {
+	  var goalCaloriesCell = document.getElementById('goal-calories');
+	  var caloriesConsumedCell = document.getElementById('calories-consumed');
+	  var caloriesBurnedCell = document.getElementById('calories-burned');
+	  var remainingCaloriesCell = document.getElementById('remaining-calories');
+
+	  var pageDate = formatDateKey();
+	  var currentDayLocalStorage = localStorage.getItem(pageDate);
+	  var currentDiary = JSON.parse(currentDayLocalStorage);
+	  goalCaloriesCell.innerText = currentDiary[5].goalCalories;
+	  caloriesConsumedCell.innerText = currentDiary[5].caloriesConsumed;
+	  remainingCaloriesCell.innerText = currentDiary[5].remainingCalories;
+	  caloriesBurnedCell.innerText = currentDiary[5].caloriesBurned;
+	}
+
 	function clearAllTables() {
 	  clearSnacksTable();
 	  clearDinnerTable();
@@ -215,7 +250,8 @@
 	  populateDinnerTable();
 	  populateSnacksTable();
 	  populateExerciseTable();
-	  calculateTotalCalories();
+	  populateTotalsTable();
+	  // calculateTotalCalories();
 	}
 
 	$(document).on('click', '#meal-trash-icon', function (e) {
@@ -338,12 +374,14 @@
 	      var eCalories = exercises[i].previousElementSibling.innerText;
 	      // populateExerciseTable(eName, eCalories);
 	      addExerciseDataToLocalStorage(eName, eCalories);
-	      updateRemainingCalories(eCalories, 0);
+	      updateTotalsTable(eCalories, 0);
+	      // updateRemainingCalories(eCalories, 0);
 	      exercises[i].childNodes[0].checked = false;
 	    }
 	  }
 	  populateExerciseTable();
 	  calculateTotalCalories();
+	  // updateTotalsTable(eCalories, 0);
 	}
 
 	function populateExerciseTable() {
@@ -383,6 +421,10 @@
 	  }
 
 	  updateCaloriesBurned(totalCalories);
+	  updateCaloriesConsumed();
+	  // updateRemainingCalories(additionalCalories, negativeCalories)
+	  // update calories consumbed;
+	  // update remaining-calories
 	}
 
 	$("#breakfast-btn").on('click', function () {
@@ -400,6 +442,13 @@
 	$("#snacks-btn").on('click', function () {
 	  mealSubmit();
 	});
+
+	function calculateTotals() {
+	  calculateTotalBreakfastCalories();
+	  calculateTotalLunchCalories();
+	  calculateTotalDinnerCalories();
+	  calculateTotalSnackCalories();
+	}
 
 	function addMealDataToLocalStorage(fName, fCalories, tableIndex) {
 	  var pageDate = formatDateKey();
@@ -421,32 +470,32 @@
 	        addMealDataToLocalStorage(fName, fCalories, 1);
 	        populateBreakfastTable();
 	        calculateTotalBreakfastCalories();
-	        updateCaloriesConsumed();
-	        updateRemainingCalories(0, fCalories);
+	        // updateCaloriesConsumed();
+	        updateTotalsTable(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "lunch-btn") {
 	        clearLunchTable();
 	        addMealDataToLocalStorage(fName, fCalories, 2);
 	        populateLunchTable();
 	        calculateTotalLunchCalories();
-	        updateCaloriesConsumed();
-	        updateRemainingCalories(0, fCalories);
+	        // updateCaloriesConsumed();
+	        updateTotalsTable(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "dinner-btn") {
 	        clearDinnerTable();
 	        addMealDataToLocalStorage(fName, fCalories, 3);
 	        populateDinnerTable();
 	        calculateTotalDinnerCalories();
-	        updateCaloriesConsumed();
-	        updateRemainingCalories(0, fCalories);
+	        // updateCaloriesConsumed();
+	        updateTotalsTable(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "snacks-btn") {
 	        clearSnacksTable();
 	        addMealDataToLocalStorage(fName, fCalories, 4);
 	        populateSnacksTable();
 	        calculateTotalSnackCalories();
-	        updateCaloriesConsumed();
-	        updateRemainingCalories(0, fCalories);
+	        // updateCaloriesConsumed();
+	        updateTotalsTable(0, fCalories);
 	      }
 	    }
 	    foods[i].childNodes[0].checked = false;
@@ -616,6 +665,7 @@
 	    total += parseFloat(snacksTotal.innerText);
 	  }
 	  caloriesConsumedCell.innerText = total;
+	  return total;
 	}
 
 	function updateCaloriesBurned(totalCalories) {
@@ -645,6 +695,7 @@
 	  } else {
 	    $('#remaining-calories').css('color', 'green');
 	  }
+	  return remainingCalories;
 	}
 
 	function setTotalsTable() {
@@ -654,18 +705,21 @@
 
 	  caloriesConsumedCell.innerText = "0";
 	  caloriesBurnedCell.innerText = "0";
-	  // updateCaloriesConsumed();
-	  // updateCaloriesBurned();
+
 	  updateRemainingCalories(0, 0);
 	}
 
 	$(document).ready(function () {
+
 	  displayExerciseData();
 	  displayFoodData();
 	  setTotalsTable();
 	  buildDiaryLocalStorage();
 	  populateAllTables();
 	  calculateTotalCalories();
+	  updateTotalsTable(0, 0);
+	  updateCaloriesConsumed();
+	  calculateTotals();
 	});
 
 /***/ },
