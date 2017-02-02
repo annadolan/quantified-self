@@ -19,7 +19,7 @@ https://annadolan.github.io/quantified-self
 
  `cd quantified-self`
  
- `run npm build`
+ `npm run build`
 
 
 ## Run Local Server
