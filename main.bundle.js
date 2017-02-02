@@ -117,14 +117,6 @@
 	  initialTableFiller();
 	}
 
-	// function displayDiaryExercises(){
-	//
-	//   // JSON.parse(localStorage.getItem('diary')).forEach(function(element){
-	//   //   // console.log(element.pageDate.exercise.totalCalories);
-	//   //   // buildTableEx(element.exerciseName, element.calorieCount);
-	//   // });
-	// }
-
 	function displayExerciseData() {
 	  var exercises = JSON.parse(localStorage.getItem('exercise-calories'));
 	  if (exercises === null) {
@@ -209,23 +201,93 @@
 	  }
 	}
 
+	function clearAllTables() {
+	  clearSnacksTable();
+	  clearDinnerTable();
+	  clearExerciseTable();
+	  clearLunchTable();
+	  clearBreakfastTable();
+	}
+
+	function populateAllTables() {
+	  populateLunchTable();
+	  populateBreakfastTable();
+	  populateDinnerTable();
+	  populateSnacksTable();
+	  populateExerciseTable();
+	  calculateTotalCalories();
+	}
+
+	$(document).on('click', '#meal-trash-icon', function (e) {
+	  e.preventDefault();
+	  var name = $(this).parent().siblings()[0].innerHTML;
+	  var calories = $(this).parent().siblings()[1].innerHTML;
+	  tableRow = $(this).parent().parent();
+	  tableRow.remove();
+	  if (tableRow[0].className === "breakfast-table-row") {
+	    deleteDiaryFood(name, calories, 1);
+	  } else if (tableRow[0].className === "lunch-table-row") {
+	    deleteDiaryFood(name, calories, 2);
+	  } else if (tableRow[0].className === "dinner-table-row") {
+	    deleteDiaryFood(name, calories, 3);
+	  } else {
+	    deleteDiaryFood(name, calories, 4);
+	  }
+	});
+
+	$(document).on('click', '#exercise-trash-icon', function (e) {
+	  e.preventDefault();
+	  var name = $(this).parent().siblings()[0].innerHTML;
+	  var calories = $(this).parent().siblings()[1].innerHTML;
+	  tableRow = $(this).parent().parent();
+	  tableRow.remove();
+	  deleteDiaryExercise(name, calories);
+	});
+
+	function deleteDiaryFood(name, calories, arrayPosition) {
+	  var pageDate = formatDateKey();
+	  var currentDayLocalStorage = localStorage.getItem(pageDate);
+	  var currentDiary = JSON.parse(currentDayLocalStorage);
+	  var meal = currentDiary[arrayPosition].tableData;
+	  meal.forEach(function (object) {
+	    if (object.name === name && object.calories === calories) {
+	      meal.splice(meal.indexOf(object), 1);
+	      diaryJSON = JSON.stringify(currentDiary);
+	      localStorage.setItem(pageDate, diaryJSON);
+	    }
+	  });
+	}
+
+	function deleteDiaryExercise(name, calories) {
+	  var pageDate = formatDateKey();
+	  var currentDayLocalStorage = localStorage.getItem(pageDate);
+	  var currentDiary = JSON.parse(currentDayLocalStorage);
+	  var exercise = currentDiary[0].tableData;
+	  exercise.forEach(function (object) {
+	    if (object.name === name && object.calories === calories) {
+	      exercise.splice(exercise.indexOf(object), 1);
+	      diaryJSON = JSON.stringify(currentDiary);
+	      localStorage.setItem(pageDate, diaryJSON);
+	    }
+	  });
+	}
+
 	$("#diary-tomorrow").on('click', function () {
 	  count += 1;
 	  dateToday(count);
 	  buildDiaryLocalStorage();
-	  clearExerciseTable();
-	  populateExerciseTable();
+	  clearAllTables();
+	  populateAllTables();
 	  calculateTotalCalories();
 	  // clear all meal totals
-	  // populateAllMealTables
 	});
 
 	$("#diary-yesterday").on('click', function () {
 	  count -= 1;
 	  dateToday(count);
 	  buildDiaryLocalStorage();
-	  clearExerciseTable();
-	  populateExerciseTable();
+	  clearAllTables();
+	  populateAllTables();
 	  calculateTotalCalories();
 	  // persistInLocalStorage();
 	});
@@ -245,8 +307,6 @@
 	$("#add-exercise").on('click', function () {
 	  clearExerciseTable();
 	  exerciseSubmit();
-	  // setExDiaryLocalStorage();
-	  // displayDiaryExercises()
 	});
 
 	function addExerciseDataToLocalStorage(eName, eCalories) {
@@ -275,13 +335,6 @@
 	}
 
 	function populateExerciseTable() {
-	  // var exercisesNames = document.getElementsByClassName("exercise-table-row")
-	  // while(exercisesNames[0]) {
-	  //     exercisesNames[0].parentNode.removeChild(exercisesNames[0]);
-	  // }​
-	  // add code which clears the exercise table before this is run to fix bug
-	  // add class to exercise name
-	  // find all and delete all elements of exercise-name-cell and exercise-calorie-cell
 	  var pageDate = formatDateKey();
 	  var currentDayLocalStorage = localStorage.getItem(pageDate);
 	  var currentDiary = JSON.parse(currentDayLocalStorage);
@@ -296,7 +349,7 @@
 	    caloriesCell.innerText = currentDiary[0].tableData[i].calories;
 	    caloriesCell.className = "exercise-calorie-cell";
 	    nameCell.className = "exercise-name-cell";
-	    trashCell.innerHTML = "<span class='glyphicon glyphicon-trash trash-icon'>";
+	    trashCell.innerHTML = "<a href='' id='exercise-trash-icon'><span class='glyphicon glyphicon-trash exercise-trash-icon'></a>";
 	  }
 	}
 
@@ -321,7 +374,6 @@
 	}
 
 	$("#breakfast-btn").on('click', function () {
-	  //clear breakfast table
 	  mealSubmit();
 	});
 
@@ -389,19 +441,6 @@
 	  }
 	}
 
-	// function populateMealTable(tableDiaryIndex, tableClassName){
-	//   var pageDate = formatDateKey();
-	//   var currentDayLocalStorage = localStorage.getItem(pageDate);
-	//   var currentDiary = JSON.parse(currentDayLocalStorage);
-	//   debugger;
-	//   currentDiary[tableDiaryIndex].tableData.forEach(function(object){
-	//     $('#' + tableClassName + 'tr:first-child').after(`<tr class="${tableClassName}-row">
-	//       <td>${object.name}</td>
-	//       <td class='breakfast-table-calorie-cell''>${object.calories}</td>
-	//       <td><a href='' id='meal-trash-icon'><span class='glyphicon glyphicon-trash mealtrash-icon'></a></td>
-	//       </tr>`);
-	// });
-	// }
 	function populateDinnerTable() {
 	  var pageDate = formatDateKey();
 	  var currentDayLocalStorage = localStorage.getItem(pageDate);
@@ -410,7 +449,7 @@
 	    $('#dinner-table tr:first-child').after(`<tr class="dinner-table-row">
 	      <td>${object.name}</td>
 	      <td class='dinner-table-calorie-cell''>${object.calories}</td>
-	      <td><a href='' id='meal-trash-icon'><span class='glyphicon glyphicon-trash mealtrash-icon'></a></td>
+	      <td><a href='' id='meal-trash-icon'><span class='glyphicon glyphicon-trash meal-trash-icon'></a></td>
 	      </tr>`);
 	  });
 	}
@@ -423,7 +462,7 @@
 	    $('#snacks-table tr:first-child').after(`<tr class="snacks-table-row">
 	      <td>${object.name}</td>
 	      <td class='snacks-table-calorie-cell''>${object.calories}</td>
-	      <td><a href='' id='meal-trash-icon'><span class='glyphicon glyphicon-trash mealtrash-icon'></a></td>
+	      <td><a href='' id='meal-trash-icon'><span class='glyphicon glyphicon-trash meal-trash-icon'></a></td>
 	      </tr>`);
 	  });
 	}
@@ -436,7 +475,7 @@
 	    $('#lunch-table tr:first-child').after(`<tr class="lunch-table-row">
 	      <td>${object.name}</td>
 	      <td class='lunch-table-calorie-cell''>${object.calories}</td>
-	      <td><a href='' id='meal-trash-icon'><span class='glyphicon glyphicon-trash mealtrash-icon'></a></td>
+	      <td><a href='' id='meal-trash-icon'><span class='glyphicon glyphicon-trash meal-trash-icon'></a></td>
 	      </tr>`);
 	  });
 	}
@@ -449,24 +488,9 @@
 	    $('#breakfast-table tr:first-child').after(`<tr class="breakfast-table-row">
 	      <td>${object.name}</td>
 	      <td class='breakfast-table-calorie-cell''>${object.calories}</td>
-	      <td><a href='' id='meal-trash-icon'><span class='glyphicon glyphicon-trash mealtrash-icon'></a></td>
+	      <td><a href='' id='meal-trash-icon'><span class='glyphicon glyphicon-trash meal-trash-icon'></a></td>
 	      </tr>`);
 	  });
-	}
-
-	// function populateLunchTable(fName, fCalories){
-	//   var lunchTable = document.getElementById('lunch-table');
-	//   addRowToTable(lunchTable, fName, fCalories);
-	// }
-
-	function populateDinnerTable(fName, fCalories) {
-	  var dinnerTable = document.getElementById('dinner-table');
-	  addRowToTable(dinnerTable, fName, fCalories);
-	}
-
-	function populateSnacksTable(fName, fCalories) {
-	  var snacksTable = document.getElementById('snacks-table');
-	  addRowToTable(snacksTable, fName, fCalories);
 	}
 
 	function calculateTotalBreakfastCalories() {
@@ -546,17 +570,6 @@
 
 	  snacksCalorieCell.innerText = snacksCalories;
 	  calculateRemainingCalories("snacks", snacksCalories);
-	}
-
-	function addRowToTable(mealTable, fName, fCalories) {
-	  var row = mealTable.insertRow(1);
-	  var nameCell = row.insertCell(0);
-	  var caloriesCell = row.insertCell(1);
-	  var trashCell = row.insertCell(2);
-	  nameCell.innerText = fName;
-	  caloriesCell.innerText = fCalories;
-	  caloriesCell.className = mealTable.id + "-calorie-cell";
-	  trashCell.innerHTML = "<span class='glyphicon glyphicon-trash trash-icon'>";
 	}
 
 	function setRemainingCalories(goalCalories) {
@@ -639,11 +652,7 @@
 	  displayFoodData();
 	  setTotalsTable();
 	  buildDiaryLocalStorage();
-	  populateLunchTable();
-	  populateBreakfastTable();
-	  populateDinnerTable();
-	  populateSnacksTable();
-	  populateExerciseTable();
+	  populateAllTables();
 	  calculateTotalCalories();
 	});
 
