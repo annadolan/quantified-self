@@ -710,6 +710,181 @@
 	      assert.include(tableContent, 'Total Calories 200');
 	    });
 	  });
+
+	  test.it('Totals table updates with calories consumed', function () {
+
+	    driver.get('http://localhost:8080');
+
+	    var checkBox = driver.findElement({ id: 'food-checkbox-id' });
+	    var breakfastButton = driver.findElement({ id: 'breakfast-btn' });
+
+	    checkBox.click();
+	    breakfastButton.click();
+	    checkBox.click();
+	    breakfastButton.click();
+
+	    driver.findElement({ id: 'totals-table' }).getText().then(function (tableContent) {
+	      assert.include(tableContent, 'Calories Consumed 400');
+	    });
+	  });
+
+	  test.it('Totals table updates with calories burned', function () {
+
+	    driver.get('http://localhost:8080');
+
+	    var checkBoxEx = driver.findElement({ id: 'exercise-checkbox-id' });
+	    var exerciseButton = driver.findElement({ id: 'add-exercise' });
+
+	    checkBoxEx.click();
+	    exerciseButton.click();
+
+	    driver.findElement({ id: 'totals-table' }).getText().then(function (tableContent) {
+	      assert.include(tableContent, 'Calories Burned 200');
+	    });
+	  });
+
+	  test.it('Totals table updates with calorie total', function () {
+
+	    driver.get('http://localhost:8080');
+
+	    var checkBoxEx = driver.findElement({ id: 'exercise-checkbox-id' });
+	    var exerciseButton = driver.findElement({ id: 'add-exercise' });
+	    var checkBox = driver.findElement({ id: 'food-checkbox-id' });
+	    var breakfastButton = driver.findElement({ id: 'breakfast-btn' });
+
+	    checkBoxEx.click();
+	    exerciseButton.click();
+	    checkBox.click();
+	    breakfastButton.click();
+	    checkBox.click();
+	    breakfastButton.click();
+
+	    driver.findElement({ id: 'totals-table' }).getText().then(function (tableContent) {
+	      assert.include(tableContent, 'Remaining Calories 1800');
+	    });
+	  });
+
+	  test.it('Checkboxes clear when food is added to a meal table', function () {
+
+	    driver.get('http://localhost:8080');
+
+	    var checkBox = driver.findElement({ id: 'food-checkbox-id' });
+	    var breakfastButton = driver.findElement({ id: 'breakfast-btn' });
+
+	    checkBox.click();
+	    breakfastButton.click();
+
+	    checkBox.isSelected().then(function (boolean) {
+	      assert.equal(boolean, false);
+	    });
+	  });
+
+	  test.it('Checkboxes clear when exercise is added to diary exercise table', function () {
+
+	    driver.get('http://localhost:8080');
+
+	    var checkBoxEx = driver.findElement({ id: 'exercise-checkbox-id' });
+	    var exerciseButton = driver.findElement({ id: 'add-exercise' });
+
+	    checkBoxEx.click();
+	    exerciseButton.click();
+
+	    checkBoxEx.isSelected().then(function (boolean) {
+	      assert.equal(boolean, false);
+	    });
+	  });
+
+	  test.it('Defaults to todays date', function () {
+
+	    driver.get('http://localhost:8080');
+
+	    var d = new Date();
+	    var t = d.getDate();
+	    var y = d.getFullYear();
+	    var month = new Array(12);
+	    month[0] = "January";
+	    month[1] = "February";
+	    month[2] = "March";
+	    month[3] = "April";
+	    month[4] = "May";
+	    month[5] = "June";
+	    month[6] = "July";
+	    month[7] = "August";
+	    month[8] = "September";
+	    month[9] = "October";
+	    month[10] = "November";
+	    month[11] = "December";
+	    var m = month[d.getMonth()];
+	    var today = m + " " + t + ", " + y;
+
+	    driver.findElement({ id: 'diary-today' }).getText().then(function (date) {
+	      assert.equal(date, today);
+	    });
+	  });
+
+	  test.it('Links to next date', function () {
+
+	    var d = new Date();
+	    d.setDate(d.getDate() + 1);
+	    var t = d.getDate();
+	    var y = d.getFullYear();
+	    var month = new Array(12);
+	    month[0] = "January";
+	    month[1] = "February";
+	    month[2] = "March";
+	    month[3] = "April";
+	    month[4] = "May";
+	    month[5] = "June";
+	    month[6] = "July";
+	    month[7] = "August";
+	    month[8] = "September";
+	    month[9] = "October";
+	    month[10] = "November";
+	    month[11] = "December";
+	    var m = month[d.getMonth()];
+	    var tomorrow = m + " " + t + ", " + y;
+
+	    driver.get('http://localhost:8080');
+	    var nextDay = driver.findElement({ id: 'diary-tomorrow' });
+
+	    nextDay.click();
+
+	    driver.findElement({ id: 'diary-today' }).getText().then(function (date) {
+	      assert.equal(date, tomorrow);
+	    });
+	  });
+
+	  test.it('Links to previous date', function () {
+
+	    var d = new Date();
+	    d.setDate(d.getDate() - 1);
+	    var t = d.getDate();
+	    var y = d.getFullYear();
+	    var month = new Array(12);
+	    month[0] = "January";
+	    month[1] = "February";
+	    month[2] = "March";
+	    month[3] = "April";
+	    month[4] = "May";
+	    month[5] = "June";
+	    month[6] = "July";
+	    month[7] = "August";
+	    month[8] = "September";
+	    month[9] = "October";
+	    month[10] = "November";
+	    month[11] = "December";
+	    var m = month[d.getMonth()];
+	    var yesterday = m + " " + t + ", " + y;
+
+	    driver.get('http://localhost:8080');
+	    var nextDay = driver.findElement({ id: 'diary-yesterday' });
+
+	    nextDay.click();
+
+	    driver.findElement({ id: 'diary-today' }).getText().then(function (date) {
+	      assert.equal(date, yesterday);
+	    });
+	  });
 	});
 
 /***/ },
