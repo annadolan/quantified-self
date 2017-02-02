@@ -191,7 +191,8 @@
 	  clearExerciseTable();
 	  populateExerciseTable();
 	  calculateTotalCalories();
-	  // persistInLocalStorage();
+	  // clear all meal totals
+	  // populateAllMealTables
 	});
 
 	$("#diary-yesterday").on('click', function () {
@@ -295,6 +296,7 @@
 	}
 
 	$("#breakfast-btn").on('click', function () {
+	  //clear breakfast table
 	  mealSubmit();
 	});
 
@@ -310,6 +312,15 @@
 	  mealSubmit();
 	});
 
+	function addMealDataToLocalStorage(fName, fCalories, tableIndex) {
+	  var pageDate = formatDateKey();
+	  var currentDayLocalStorage = localStorage.getItem(pageDate);
+	  var currentDiary = JSON.parse(currentDayLocalStorage);
+	  currentDiary[tableIndex].tableData.push({ name: fName, calories: fCalories });
+	  diaryJSON = JSON.stringify(currentDiary);
+	  localStorage.setItem(pageDate, diaryJSON);
+	}
+
 	function mealSubmit() {
 	  var foods = document.getElementsByClassName('food-checkbox');
 
@@ -318,24 +329,28 @@
 	      var fName = foods[i].previousElementSibling.previousElementSibling.innerText;
 	      var fCalories = foods[i].previousElementSibling.innerText;
 	      if (event.currentTarget.id === "breakfast-btn") {
+	        addMealDataToLocalStorage(fName, fCalories, 1);
 	        populateBreakfastTable(fName, fCalories);
 	        calculateTotalBreakfastCalories();
 	        updateCaloriesConsumed();
 	        updateRemainingCalories(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "lunch-btn") {
+	        addMealDataToLocalStorage(fName, fCalories, 2);
 	        populateLunchTable(fName, fCalories);
 	        calculateTotalLunchCalories();
 	        updateCaloriesConsumed();
 	        updateRemainingCalories(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "dinner-btn") {
+	        addMealDataToLocalStorage(fName, fCalories, 3);
 	        populateDinnerTable(fName, fCalories);
 	        calculateTotalDinnerCalories();
 	        updateCaloriesConsumed();
 	        updateRemainingCalories(0, fCalories);
 	      }
 	      if (event.currentTarget.id === "snacks-btn") {
+	        addMealDataToLocalStorage(fName, fCalories, 4);
 	        populateSnacksTable(fName, fCalories);
 	        calculateTotalSnackCalories();
 	        updateCaloriesConsumed();
@@ -347,8 +362,21 @@
 	}
 
 	function populateBreakfastTable(fName, fCalories) {
-	  var breakfastTable = document.getElementById('breakfast-table');
-	  addRowToTable(breakfastTable, fName, fCalories);
+	  var pageDate = formatDateKey();
+	  var currentDayLocalStorage = localStorage.getItem(pageDate);
+	  var currentDiary = JSON.parse(currentDayLocalStorage);
+	  for (i = 0; i < currentDiary[1].tableData.length; i++) {
+	    var breakfastTable = document.getElementById('breakfast-table');
+	    var row = breakfastTable.insertRow(1);
+	    row.className = "breakfast-table-row";
+	    var nameCell = row.insertCell(0);
+	    var caloriesCell = row.insertCell(1);
+	    var trashCell = row.insertCell(2);
+	    nameCell.innerText = fName;
+	    caloriesCell.innerText = fCalories;
+	    caloriesCell.className = breakfastTable.id + "-calorie-cell";
+	    trashCell.innerHTML = "<span class='glyphicon glyphicon-trash trash-icon'>";
+	  }
 	}
 
 	function populateLunchTable(fName, fCalories) {
